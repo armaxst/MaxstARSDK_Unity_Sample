@@ -1,0 +1,9 @@
+static const char * FRAGMENT_SHADER_SRC_ES20 =
+	"precision mediump float;\n"
+	"uniform sampler2D u_texture_1;\n"							\
+	"varying vec2 v_texCoord;\n"								\
+	"void main()\n"												\
+	"{\n"														\
+	"	float y = texture2D(u_texture_1, v_texCoord).r;\n"		\
+	"	gl_FragColor = vec4(y, y, y, 1.0);\n"						\
+	"}\n";
