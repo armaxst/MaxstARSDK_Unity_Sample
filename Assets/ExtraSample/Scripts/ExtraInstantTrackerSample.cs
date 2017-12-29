@@ -16,10 +16,10 @@ public class ExtraInstantTrackerSample : MonoBehaviour
 	private Material lineMaterial = null;
 
 	[SerializeField]
-	private RotationController rotationController;
+	private RotationController rotationController = null;
 
 	[SerializeField]
-	private ZoomInOut zoomInOut;
+	private ZoomInOut zoomInOut = null;
 
 	private Vector3 touchToWorldPosition = Vector3.zero;
 	private Vector3 touchSumPosition = Vector3.zero;
@@ -65,7 +65,8 @@ public class ExtraInstantTrackerSample : MonoBehaviour
 		}
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
-		TrackingResult trackingResult = TrackerManager.GetInstance().GetTrackingResult(state);
+		TrackingResult trackingResult = state.GetTrackingResult();
+
 		if (trackingResult.GetCount() == 0)
 		{
 			instantTrackable.OnTrackFail();

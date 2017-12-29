@@ -79,7 +79,7 @@ public class CameraConfigurationSample : MonoBehaviour
 		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
-		TrackingResult trackingResult = TrackerManager.GetInstance().GetTrackingResult(state);
+		TrackingResult trackingResult = state.GetTrackingResult();
 
 		for (int i = 0; i < trackingResult.GetCount(); i++)
 		{
@@ -89,7 +89,7 @@ public class CameraConfigurationSample : MonoBehaviour
 		}
 
 		// For Image extrac test
-		maxstAR.Image image = state.GetImage();
+		maxstAR.TrackedImage image = state.GetImage();
 		if (image.GetWidth() > 0 && image.GetHeight() > 0)
 		{
 			int width = image.GetWidth();

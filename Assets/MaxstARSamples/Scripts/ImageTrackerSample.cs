@@ -79,7 +79,7 @@ public class ImageTrackerSample : MonoBehaviour
 		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
-		TrackingResult trackingResult = TrackerManager.GetInstance().GetTrackingResult(state);
+		TrackingResult trackingResult = state.GetTrackingResult();
 
 		for (int i = 0; i < trackingResult.GetCount(); i++)
 		{

@@ -37,7 +37,7 @@ public class SurfaceMeshBehaviour : MonoBehaviour
 	void Update()
 	{
 		TrackingState state = TrackerManager.GetInstance().GetTrackingState();
-		TrackingResult trackingResult = TrackerManager.GetInstance().GetTrackingResult(state);
+		TrackingResult trackingResult = state.GetTrackingResult();
 		if (trackingResult.GetCount() > 0)
 		{
 			SurfaceMesh surfaceMesh = TrackerManager.GetInstance().GetSurfaceMesh();

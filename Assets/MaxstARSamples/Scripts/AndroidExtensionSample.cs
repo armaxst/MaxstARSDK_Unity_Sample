@@ -14,7 +14,7 @@ public class AndroidExtensionSample : MonoBehaviour
 	private bool startTrackerDone = false;
 	private bool resizeSurfaceToggle = false;
 
-	public ImageTrackableBehaviour imageTrackable;
+	private ImageTrackableBehaviour imageTrackable;
 
 	void Start()
 	{
@@ -55,7 +55,7 @@ public class AndroidExtensionSample : MonoBehaviour
 		}
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
-		TrackingResult trackingResult = TrackerManager.GetInstance().GetTrackingResult(state);
+		TrackingResult trackingResult = state.GetTrackingResult();
 
 		if (trackingResult.GetCount() == 0)
 		{

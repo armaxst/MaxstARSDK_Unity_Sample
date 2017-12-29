@@ -36,7 +36,7 @@ public class VisualSLAMSample : MonoBehaviour
 		EnableChildrenRenderer(false);
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
-		TrackingResult trackingResult = TrackerManager.GetInstance().GetTrackingResult(state);
+		TrackingResult trackingResult = state.GetTrackingResult();
 		if (trackingResult.GetCount() == 0)
 		{
 			return;

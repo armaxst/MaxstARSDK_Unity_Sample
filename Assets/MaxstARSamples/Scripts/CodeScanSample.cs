@@ -43,7 +43,8 @@ public class CodeScanSample : MonoBehaviour
 			StartCamera();
 		}
 
-		string codeScanResult = TrackerManager.GetInstance().GetCodeScanResult();
+        TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
+        string codeScanResult = state.GetCodeScanResult();
 		if (!codeScanResult.Equals("") && codeScanResult.Length > 0)
 		{
 			TrackerManager.GetInstance().StopTracker();

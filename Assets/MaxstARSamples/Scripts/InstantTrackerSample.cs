@@ -54,7 +54,7 @@ public class InstantTrackerSample : MonoBehaviour
 		}
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
-		TrackingResult trackingResult = TrackerManager.GetInstance().GetTrackingResult(state);
+		TrackingResult trackingResult = state.GetTrackingResult();
 		if (trackingResult.GetCount() == 0)
 		{
 			instantTrackable.OnTrackFail();

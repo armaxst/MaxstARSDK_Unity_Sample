@@ -171,36 +171,36 @@
             Gray 8 bit image
             </summary>
         </member>
-        <member name="T:maxstAR.Image">
+        <member name="T:maxstAR.TrackedImage">
             <summary>
             image data which is used for tracker and rendering
             </summary>
         </member>
-        <member name="M:maxstAR.Image.GetWidth">
+        <member name="M:maxstAR.TrackedImage.GetWidth">
             <summary>
             Get width
             </summary>
             <returns></returns>
         </member>
-        <member name="M:maxstAR.Image.GetHeight">
+        <member name="M:maxstAR.TrackedImage.GetHeight">
             <summary>
             Get height
             </summary>
             <returns></returns>
         </member>
-        <member name="M:maxstAR.Image.GetLength">
+        <member name="M:maxstAR.TrackedImage.GetLength">
             <summary>
             Get length (width * height * bits per pixel)
             </summary>
             <returns></returns>
         </member>
-        <member name="M:maxstAR.Image.GetFormat">
+        <member name="M:maxstAR.TrackedImage.GetFormat">
             <summary>
             Image format
             </summary>
             <returns></returns>
         </member>
-        <member name="M:maxstAR.Image.GetData">
+        <member name="M:maxstAR.TrackedImage.GetData">
             <summary>
             Image byte array
             </summary>
@@ -421,6 +421,14 @@
             <summary>
             Container for individual tracking information
             </summary>
+        </member>
+        <member name="M:maxstAR.TrackingState.GetTrackingResult">
+            <summary>Output the number of trackers that have been tracked successfully.</summary>
+            <returns>Return trackable count.</returns>
+        </member>
+        <member name="M:maxstAR.TrackingState.GetCodeScanResult">
+            <summary>Outputs the recognition result of the bar code / QR code.</summary>
+            <returns>Return code scan string</returns>
         </member>
         <member name="M:maxstAR.TrackingState.GetImage">
             <summary>
@@ -925,14 +933,6 @@
             Get saved TrackingState value
             </summary>
             <returns>TrackingState instance</returns>
-        </member>
-        <member name="M:maxstAR.TrackerManager.GetTrackingResult(maxstAR.TrackingState)">
-            <summary>Output the number of trackers that have been tracked successfully.</summary>
-            <returns>Return trackable count.</returns>
-        </member>
-        <member name="M:maxstAR.TrackerManager.GetCodeScanResult">
-            <summary>Outputs the recognition result of the bar code / QR code.</summary>
-            <returns>Return code scan string</returns>
         </member>
         <member name="M:maxstAR.TrackerManager.GetWorldPositionFromScreenCoordinate(UnityEngine.Vector2)">
             <summary>Gets the x, y, 0 coordinates on the world coordinate corresponding to x, y in the Screen coordinate.</summary>
