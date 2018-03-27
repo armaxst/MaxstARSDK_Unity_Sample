@@ -83,17 +83,17 @@ public class MultiImageTargetB : MonoBehaviour
 
 	public void SetNormalMode()
 	{
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
 	}
 
 	public void SetExtendedMode()
 	{
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.EXTEND_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.EXTEND_TRACKING);
 	}
 
 	public void SetMultiMode()
 	{
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.MULTI_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.MULTI_TRACKING);
 	}
 
 	void OnApplicationPause(bool pause)
@@ -108,7 +108,7 @@ public class MultiImageTargetB : MonoBehaviour
 	void OnDestroy()
 	{
 		imageTrackablesMap.Clear();
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 	}

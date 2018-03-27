@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using System.Collections;
 using UnityEditor;
 
 namespace maxstAR

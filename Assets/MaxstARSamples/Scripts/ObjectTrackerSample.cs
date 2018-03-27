@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
 
@@ -62,6 +66,11 @@ public class ObjectTrackerSample : MonoBehaviour
 			trackable.Value.OnTrackFail();
 		}
 	}
+
+    public void OnClickBackButton()
+    {
+        SceneStackManager.Instance.LoadPrevious();
+    }
 
 	void Update()
 	{

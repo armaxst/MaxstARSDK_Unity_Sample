@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Text;
@@ -26,10 +30,13 @@ public class CodeScanSample : MonoBehaviour
 			btnText = startScanBtn.GetComponentInChildren<Text>();
 		}
 
-		BackgroundRenderer.GetInstance().SetRenderingOption(BackgroundRenderer.RenderingOption.VIEW_FINDER_RENDERER);
-
 		StartCodeScan();
 	}
+
+    public void OnClickBackButton()
+    {
+        SceneStackManager.Instance.LoadPrevious();
+    }
 
 	void Update()
 	{

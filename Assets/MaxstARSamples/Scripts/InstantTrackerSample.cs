@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,6 +36,11 @@ public class InstantTrackerSample : MonoBehaviour
 		instantTrackable.OnTrackFail();
 	}
 
+    public void OnClickBackButton()
+    {
+        SceneStackManager.Instance.LoadPrevious();
+    }
+
 	void Update()
 	{
 		if (Input.GetKey(KeyCode.Escape))
@@ -55,6 +64,7 @@ public class InstantTrackerSample : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 		TrackingResult trackingResult = state.GetTrackingResult();
+
 		if (trackingResult.GetCount() == 0)
 		{
 			instantTrackable.OnTrackFail();
