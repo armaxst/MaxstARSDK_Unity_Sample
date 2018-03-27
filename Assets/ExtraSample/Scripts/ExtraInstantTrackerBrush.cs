@@ -11,35 +11,25 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class InstantTrackerMultiContents : MonoBehaviour
+public class ExtraInstantTrackerBrush : MonoBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
-
-	public GameObject cube = null;
 
 	private bool startTrackerDone = false;
 	private bool cameraStartDone = false;
 	private bool findSurfaceDone = false;
 
-	private List<InstantTrackableBehaviour> instantTrackables = new List<InstantTrackableBehaviour>();
+	private InstantTrackableBehaviour instantTrackable = null;
+	private LineRenderer lineRenderer = null;
 
-	private List<Vector3> touchToWorldPositions = new List<Vector3> ();
-	private List<Vector3> touchSumPositions = new List<Vector3> ();
-
-	private int id = 0;
+	private Vector3 [] linePoint = new Vector3[100];
+	private int linePointCount = 0;
 
 	void Start ()
 	{
-		instantTrackables.Clear();
-		InstantTrackableBehaviour[] trackables = FindObjectsOfType<InstantTrackableBehaviour>();
-		foreach (var trackable in trackables)
-		{
-			trackable.OnTrackFail ();
-			instantTrackables.Add (trackable);
-			touchToWorldPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
-			touchSumPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
-		}
+		instantTrackable = FindObjectOfType<InstantTrackableBehaviour>();
+		lineRenderer = instantTrackable.GetComponentInChildren<LineRenderer> ();
 	}
 
 	public void OnClickBackButton ()
@@ -65,54 +55,37 @@ public class InstantTrackerMultiContents : MonoBehaviour
 		TrackingResult trackingResult = state.GetTrackingResult ();
 
 		if (trackingResult.GetCount () == 0) {
-			foreach (var trackable in instantTrackables)
-			{
-				trackable.OnTrackFail ();
-			}
+			instantTrackable.OnTrackFail ();
 			return;
 		}	
 
+		Trackable track = trackingResult.GetTrackable (0);
+		instantTrackable.OnTrackSuccess (track.GetId (), track.GetName (), track.GetPose ());
+
+		#if UNITY_EDITOR
+		if (Input.GetMouseButtonDown(0))
+		{
+			if (linePointCount < 100) {
+				linePoint [linePointCount++] = TrackerManager.GetInstance ().GetWorldPositionFromScreenCoordinate (Input.mousePosition);
+				lineRenderer.positionCount = linePointCount;
+				lineRenderer.SetPositions (linePoint);
+			}
+		}
+		#else
 		if (Input.touchCount > 0)
 		{
-			UpdateTouchPositionDelta(id);
+			if (linePointCount < 100) {
+				linePoint [linePointCount++] = TrackerManager.GetInstance ().GetWorldPositionFromScreenCoordinate (Input.GetTouch (0).position);
+				lineRenderer.positionCount = linePointCount;
+				lineRenderer.SetPositions (linePoint);
+			}
 		}
 
-		for (int i = 0; i < instantTrackables.Count; i++) {
-			Trackable track = trackingResult.GetTrackable (0);
-			Matrix4x4 poseMatrix = track.GetPose () * Matrix4x4.Translate (touchSumPositions[i]);
-			instantTrackables[i].OnTrackSuccess (track.GetId (), track.GetName (), poseMatrix);
+		if (Input.GetTouch (0).phase == TouchPhase.Ended) {
+			linePointCount = 0;
 		}
-	}
+		#endif
 
-	private void UpdateTouchPositionDelta(int id)
-	{
-		switch (Input.GetTouch(0).phase)
-		{
-			case TouchPhase.Began:
-				touchToWorldPositions[id] = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(Input.GetTouch(0).position);
-				break;
-			
-			case TouchPhase.Moved:
-				Vector3 currentWorldPosition = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(Input.GetTouch(0).position);
-				touchSumPositions[id] += (currentWorldPosition - touchToWorldPositions[id]);
-				touchToWorldPositions[id] = currentWorldPosition;
-			break;
-		}
-	}
-
-	public void ClickNumber1()
-	{
-		id = 0;
-	}
-
-	public void ClickNumber2()
-	{
-		id = 1;
-	}
-
-	public void ClickNumber3()
-	{
-		id = 2;
 	}
 
 	void OnApplicationPause (bool pause)
@@ -162,10 +135,6 @@ public class InstantTrackerMultiContents : MonoBehaviour
 				startBtnText.text = "Stop Tracking";
 			}
 			findSurfaceDone = true;
-			for (int i = 0 ; i < touchSumPositions.Count; i++)
-			{
-				touchSumPositions[i] = Vector3.zero;
-			}
 		} else {
 			TrackerManager.GetInstance ().QuitFindingSurface ();
 			if (startBtnText != null) {

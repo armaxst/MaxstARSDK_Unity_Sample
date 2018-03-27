@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class ExtraInstantTrackerSample : MonoBehaviour
+public class ExtraInstantTrackerGrid : MonoBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
