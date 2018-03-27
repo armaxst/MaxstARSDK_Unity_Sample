@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class VisualSLAMBrush : MonoBehaviour
+public class ExtraVisualSLAMBrush : MonoBehaviour
 {
 	private bool cameraStartDone = false;
     private bool startTrackerDone = false;

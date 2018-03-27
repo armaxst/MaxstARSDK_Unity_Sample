@@ -4,7 +4,7 @@ using System.Text;
 
 using maxstAR;
 
-public class ExtraImageTrackerSample : MonoBehaviour
+public class ExtraImageTrackerKnight : MonoBehaviour
 {
 	[SerializeField]
 	private GameObject nonARObject = null;

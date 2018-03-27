@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class InstantTrackerMultiContents : MonoBehaviour
+public class ExraInstantTrackerMultiContents : MonoBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
@@ -72,10 +72,17 @@ public class InstantTrackerMultiContents : MonoBehaviour
 			return;
 		}	
 
+		#if UNITY_EDITOR
+		if (Input.GetMouseButton(0))
+		{
+			touchSumPositions[id] = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(Input.mousePosition);
+		}
+		#else
 		if (Input.touchCount > 0)
 		{
 			UpdateTouchPositionDelta(id);
 		}
+		#endif
 
 		for (int i = 0; i < instantTrackables.Count; i++) {
 			Trackable track = trackingResult.GetTrackable (0);

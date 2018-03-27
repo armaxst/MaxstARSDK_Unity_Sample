@@ -42,7 +42,7 @@ public class InstantPlaneGrid
 		GL.Begin(GL.LINES);
 		GL.Color(lineColor);
 
-		for (m = 1; m <= numOfLines; m++)
+		for (m = 0; m <= numOfLines; m++)
 		{
 			fMain = m * lineSpacing;
 

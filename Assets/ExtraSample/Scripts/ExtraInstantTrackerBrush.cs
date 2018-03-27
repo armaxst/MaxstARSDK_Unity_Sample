@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class InstantTrackerBruch : MonoBehaviour
+public class ExtraInstantTrackerBrush : MonoBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
