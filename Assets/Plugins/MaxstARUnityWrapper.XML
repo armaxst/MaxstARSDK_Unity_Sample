@@ -171,6 +171,35 @@
             Gray 8 bit image
             </summary>
         </member>
+        <member name="T:maxstAR.GuideInfo">
+            <summary>
+            Contains surface's data generated from slam tracking
+            </summary>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetInitializingProgress">
+            <summary>
+            Get a percentage of progress during an initialization step of SLAM
+            </summary>
+            <returns>Slam initializing progress</returns>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetFeatureCount">
+            <summary>
+            Get projected feature count in SLAM (float * 3 = 1 feature)
+            </summary>
+            <returns>projected feature count for SLAM</returns>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetKeyframeCount">
+            <summary>
+            Get keyframe count in SLAM
+            </summary>
+            <returns>keyframe count for SLAM</returns>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetFeatureBuffer">
+            <summary>
+            Get projected feature buffer for SLAM (Always returns same address so vertex count must be considered)
+            </summary>
+            <returns>feature buffer</returns>
+        </member>
         <member name="T:maxstAR.TrackedImage">
             <summary>
             image data which is used for tracker and rendering
@@ -307,79 +336,11 @@
             Set device environment
             </summary>
         </member>
-        <member name="M:maxstAR.MaxstAR.OnSurfaceDestroyed">
-            <summary>
-            Release resources used for background rendering
-            </summary>
-        </member>
         <member name="M:maxstAR.MaxstAR.SetScreenOrientation(System.Int32)">
             <summary>
             Notify screen orientation chagned
             </summary>
             <param name="orientation">ScreenOrientation enum value</param>
-        </member>
-        <member name="T:maxstAR.BackgroundRenderer">
-            <summary>
-            Do background rendering. Background rendering includes camera image,
-            feature point, slam initialization progress bar, watermark, surface mesh
-            </summary>
-        </member>
-        <member name="M:maxstAR.BackgroundRenderer.GetInstance">
-            <summary>
-            Get a BackgroundRenderer instance.
-            </summary>
-            <returns>Return the BackgroundRenderer instance</returns>
-        </member>
-        <member name="M:maxstAR.BackgroundRenderer.SetRenderingOption(maxstAR.BackgroundRenderer.RenderingOption[])">
-            <summary>
-            Set additional rendering option. Slam feature point, Surface mesh, etc.
-            Should be called after initRendering
-            </summary>
-            <param name="options">
-            RenderingOption values
-            </param>		
-        </member>
-        <member name="M:maxstAR.BackgroundRenderer.SetClippingPlane(System.Single,System.Single)">
-            <summary>
-            Set view frustrum's near and far clipping plane distance. 
-            </summary>
-            <param name="nearClipPlane">near clipping plane distance</param>
-            <param name="farClipPlane">far end of camera frustum over which background is rendered</param>
-        </member>
-        <member name="T:maxstAR.BackgroundRenderer.RenderingOption">
-            <summary>
-            Additional rendering option in native rendering. Slam feature point, Surface mesh, etc. (Supported only Opengl mode(ES20, ES30, GLCore))
-            1 : Feature point rendering.(Object Tracker and Visual SLAM)
-            2 : Creating slam map progress rendering.(Visual SLAM only)
-            4 : Slam initial pose coordinate rendering.(Code Tracker is not supported)
-            8 : Slam surface mesh rendering.(Object Tracker and Visual SLAM)
-            10 : Scan view finder rendering.(Code Tracker Only)
-            </summary>
-        </member>
-        <member name="F:maxstAR.BackgroundRenderer.RenderingOption.FEATURE_RENDERER">
-            <summary>
-            Show feature point
-            </summary>
-        </member>
-        <member name="F:maxstAR.BackgroundRenderer.RenderingOption.PROGRESS_RENDERER">
-            <summary>
-            Show slam initialization progress bar
-            </summary>
-        </member>
-        <member name="F:maxstAR.BackgroundRenderer.RenderingOption.AXIS_RENDERER">
-            <summary>
-            Show slam initial pose coordinate axis
-            </summary>
-        </member>
-        <member name="F:maxstAR.BackgroundRenderer.RenderingOption.SURFACE_MESH_RENDERER">
-            <summary>
-            Show slam surface mesh
-            </summary>
-        </member>
-        <member name="F:maxstAR.BackgroundRenderer.RenderingOption.VIEW_FINDER_RENDERER">
-            <summary>
-            Code scan view finder rendering
-            </summary>
         </member>
         <member name="T:maxstAR.AbstractConfigurationScriptableObject">
             <summary>
@@ -453,24 +414,19 @@
             </summary>
             <returns>Result of device initialize</returns>
         </member>
-        <member name="M:maxstAR.WearableCalibration.Init(System.String)">
+        <member name="M:maxstAR.WearableCalibration.Init(System.String,System.Int32,System.Int32)">
             <summary>
             Initialize the HMD device.
             </summary>
             <param name="modelName">Device name</param>
+            <param name="width">Device screen width</param>
+            <param name="height">Device screen height</param>
             <returns>Result of device initialize</returns>
         </member>
         <member name="M:maxstAR.WearableCalibration.Deinit">
             <summary>
             Deinitialize the HMD device.
             </summary>
-        </member>
-        <member name="M:maxstAR.WearableCalibration.SetSurfaceSize(System.Int32,System.Int32)">
-            <summary>
-            Set the HMD device screen size.
-            </summary>
-            <param name="width">Screen width</param>
-            <param name="height">Screen height</param>
         </member>
         <member name="M:maxstAR.WearableCalibration.GetViewport(maxstAR.WearableCalibration.EyeType)">
             <summary>
@@ -721,6 +677,11 @@
             1280 * 720 (16:9 Resolution)
             </summary>
         </member>
+        <member name="F:maxstAR.CameraDevice.CameraResolution.Resolution1920x1080">
+            <summary>
+            1920 * 1080 (16:9 Resolution)
+            </summary>
+        </member>
         <member name="T:maxstAR.CameraDevice.FlipDirection">
             <summary>
             Flip video
@@ -805,39 +766,6 @@
             </summary>
             <returns>thumbnail image data buffer</returns>
         </member>
-        <member name="T:maxstAR.SurfaceMesh">
-            <summary>
-            Contains surface's mesh data generated from slam tracking
-            </summary>
-        </member>
-        <member name="M:maxstAR.SurfaceMesh.GetInitializingProgress">
-            <summary>
-            Get a percentage of progress during an initialization step of SLAM
-            </summary>
-            <returns>Slam initializing progress</returns>
-        </member>
-        <member name="M:maxstAR.SurfaceMesh.GetVertexCount">
-            <summary>
-            </summary>
-            <returns>surface mesh vertex count</returns>
-        </member>
-        <member name="M:maxstAR.SurfaceMesh.GetIndexCount">
-            <summary>
-            </summary>
-            <returns>surface mesh index count</returns>
-        </member>
-        <member name="M:maxstAR.SurfaceMesh.GetVertexBuffer">
-            <summary>
-            surface mesh vertex buffer (Always returns same address so vertex count must be considered)
-            </summary>
-            <returns>surface mesh vertex buffer</returns>
-        </member>
-        <member name="M:maxstAR.SurfaceMesh.GetIndexBuffer">
-            <summary>
-            surface mesh index buffer (Always returns same address so index count must be considered )
-            </summary>
-            <returns>surface mesh index buffer</returns>
-        </member>
         <member name="T:maxstAR.Trackable">
             <summary>
             Container for individual tracking information
@@ -869,6 +797,11 @@
         <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_IMAGE">
             <summary>
             Planar image Tracker
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_MARKER">
+            <summary>
+            Marker Tracker
             </summary>
         </member>
         <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_OBJECT">
@@ -939,23 +872,15 @@
             <param name="screen">Input screen coordinates 2d.</param>
             <returns>World coordinates 3d</returns>
         </member>
-        <member name="M:maxstAR.TrackerManager.GetKeyframeCount">
-            <summary>Get the tracking infomation.</summary>
-            <returns>Return number of keyframes.</returns>
-        </member>
-        <member name="M:maxstAR.TrackerManager.GetFeatureCount">
-            <summary>Get the tracking infomation.</summary>
-            <returns>Return number of features.</returns>
-        </member>
         <member name="M:maxstAR.TrackerManager.FindSurface">
             <summary>Start SLAM learning.</summary>
         </member>
         <member name="M:maxstAR.TrackerManager.QuitFindingSurface">
             <summary>SLAM stops learning.</summary>
         </member>
-        <member name="M:maxstAR.TrackerManager.GetSurfaceMesh">
+        <member name="M:maxstAR.TrackerManager.GetGuideInfo">
             <summary>
-            Get surface mesh information of the found surface after the FindSurface method has been called
+            Get guide information of the found surface on SLAM after the FindSurface method has been called
             </summary>
             <returns>SurfaceMesh instance</returns>
         </member>
@@ -972,19 +897,29 @@
             4 : Multi Target Tracking
             </summary>
         </member>
-        <member name="F:maxstAR.TrackerManager.TrackingOption.NORMAL_MODE">
+        <member name="F:maxstAR.TrackerManager.TrackingOption.NORMAL_TRACKING">
             <summary>
             Normal Tracking
             </summary>
         </member>
-        <member name="F:maxstAR.TrackerManager.TrackingOption.EXTEND_MODE">
+        <member name="F:maxstAR.TrackerManager.TrackingOption.EXTEND_TRACKING">
             <summary>
             Extended Tracking
             </summary>
         </member>
-        <member name="F:maxstAR.TrackerManager.TrackingOption.MULTI_MODE">
+        <member name="F:maxstAR.TrackerManager.TrackingOption.MULTI_TRACKING">
             <summary>
             Multiple Target Tracking
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TrackingOption.JITTER_REDUCTION_ACTIVATION">
+            <summary>
+            Jitter Reduction Activation
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TrackingOption.JITTER_REDUCTION_DEACTIVATION">
+            <summary>
+            Jitter Reduction Deactivation
             </summary>
         </member>
         <member name="T:maxstAR.TrackingResult">

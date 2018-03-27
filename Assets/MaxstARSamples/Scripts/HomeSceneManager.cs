@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using UnityEngine;
 using System.Collections;
 
 public class HomeSceneManager : MonoBehaviour
@@ -14,6 +18,11 @@ public class HomeSceneManager : MonoBehaviour
     public void OnImageTargetClick()
     {
         SceneStackManager.Instance.LoadScene("Home", "ImageTracker");
+    }
+
+    public void OnMarkerImageClick()
+    {
+        SceneStackManager.Instance.LoadScene("Home", "MarkerTracker");
     }
 
     public void OnInstantImageClick()

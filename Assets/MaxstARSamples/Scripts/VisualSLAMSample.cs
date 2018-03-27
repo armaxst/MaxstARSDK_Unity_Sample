@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
+using UnityEngine.UI;
 
 using maxstAR;
 
@@ -11,18 +16,27 @@ public class VisualSLAMSample : MonoBehaviour
 	private string fileName = null;
 
 	private bool cameraStartDone = false;
+    private bool startTrackerDone = false;
+
+    public Slider progressSlider;
 
 	void Start()
 	{
-		Screen.orientation = ScreenOrientation.LandscapeLeft;
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+
 		fileName = Application.persistentDataPath + "/3dmap/Sample.3dmap";
 
 		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_SLAM);
-		BackgroundRenderer.GetInstance().SetRenderingOption(
-			BackgroundRenderer.RenderingOption.FEATURE_RENDERER,
-			BackgroundRenderer.RenderingOption.PROGRESS_RENDERER,
-			BackgroundRenderer.RenderingOption.SURFACE_MESH_RENDERER);
+
 	}
+
+    public void OnClickBackButton()
+    {
+        SceneStackManager.Instance.LoadPrevious();
+    }
 
 	void Update()
 	{
@@ -33,7 +47,16 @@ public class VisualSLAMSample : MonoBehaviour
 
 		StartCamera();
 
+        if (!startTrackerDone)
+        {
+            TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_SLAM);
+            startTrackerDone = true;
+        }
+
 		EnableChildrenRenderer(false);
+
+		Debug.Log(TrackerManager.GetInstance ().GetGuideInfo ().GetInitializingProgress ().ToString());
+
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 		TrackingResult trackingResult = state.GetTrackingResult();
@@ -57,6 +80,7 @@ public class VisualSLAMSample : MonoBehaviour
 		if (pause)
 		{
 			TrackerManager.GetInstance().StopTracker();
+            startTrackerDone = false;
 			StopCamera();
 		}
 	}
@@ -75,11 +99,6 @@ public class VisualSLAMSample : MonoBehaviour
 		TrackerManager.GetInstance().DestroyTracker();
 
 		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_SLAM);
-		BackgroundRenderer.GetInstance().SetRenderingOption(
-			BackgroundRenderer.RenderingOption.FEATURE_RENDERER,
-			BackgroundRenderer.RenderingOption.PROGRESS_RENDERER,
-			BackgroundRenderer.RenderingOption.SURFACE_MESH_RENDERER);
-
 		TrackerManager.GetInstance().FindSurface();
 	}
 
@@ -101,10 +120,6 @@ public class VisualSLAMSample : MonoBehaviour
 		TrackerManager.GetInstance().DestroyTracker();
 
 		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_OBJECT);
-		BackgroundRenderer.GetInstance().SetRenderingOption(
-				BackgroundRenderer.RenderingOption.FEATURE_RENDERER,
-				BackgroundRenderer.RenderingOption.PROGRESS_RENDERER,
-				BackgroundRenderer.RenderingOption.SURFACE_MESH_RENDERER);
 
 		TrackerManager.GetInstance().AddTrackerData(fileName);
 

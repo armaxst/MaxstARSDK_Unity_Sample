@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,6 +17,9 @@ public class ImageTrackerSample : MonoBehaviour
 
 	void Start()
 	{
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+
 		imageTrackablesMap.Clear();
 		ImageTrackableBehaviour[] imageTrackables = FindObjectsOfType<ImageTrackableBehaviour>();
 		foreach (var trackable in imageTrackables)
@@ -61,6 +68,10 @@ public class ImageTrackerSample : MonoBehaviour
 		}
 	}
 
+    public void OnClickBackButton() {
+        SceneStackManager.Instance.LoadPrevious();
+    }
+
 	void Update()
 	{
 		if (Input.GetKey(KeyCode.Escape))
@@ -91,17 +102,17 @@ public class ImageTrackerSample : MonoBehaviour
 
 	public void SetNormalMode()
 	{
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_MODE);
+        TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
 	}
 
 	public void SetExtendedMode()
 	{
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.EXTEND_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.EXTEND_TRACKING);
 	}
 
 	public void SetMultiMode()
 	{
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.MULTI_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.MULTI_TRACKING);
 	}
 
 	void OnApplicationPause(bool pause)
@@ -117,7 +128,7 @@ public class ImageTrackerSample : MonoBehaviour
 	void OnDestroy()
 	{
 		imageTrackablesMap.Clear();
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();

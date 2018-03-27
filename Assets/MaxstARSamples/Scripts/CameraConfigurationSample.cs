@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*==============================================================================
+Copyright 2017 Maxst, Inc. All Rights Reserved.
+==============================================================================*/
+
+using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
 
@@ -61,6 +65,11 @@ public class CameraConfigurationSample : MonoBehaviour
 		}
 	}
 
+    public void OnClickBackButton()
+    {
+        SceneStackManager.Instance.LoadPrevious();
+    }
+
 	void Update()
 	{
 		if (Input.GetKey(KeyCode.Escape))
@@ -86,25 +95,6 @@ public class CameraConfigurationSample : MonoBehaviour
 			Trackable trackable = trackingResult.GetTrackable(i);
 			imageTrackablesMap[trackable.GetName()].OnTrackSuccess(
 				trackable.GetId(), trackable.GetName(), trackable.GetPose());
-		}
-
-		// For Image extrac test
-		maxstAR.TrackedImage image = state.GetImage();
-		if (image.GetWidth() > 0 && image.GetHeight() > 0)
-		{
-			int width = image.GetWidth();
-			int height = image.GetHeight();
-			byte [] data = image.GetData();
-
-			Debug.Log("width : " + width);
-			Debug.Log("height : " + height);
-			Debug.Log("length : " + image.GetLength());
-			Debug.Log("format : " + image.GetFormat());
-
-			if (data != null)
-			{
-				Debug.Log("data : " + data[0] + ", " + data[1] + ", " + data[2] + ", " + data[3]);
-			}
 		}
 	}
 
@@ -167,7 +157,7 @@ public class CameraConfigurationSample : MonoBehaviour
 		CameraDevice.GetInstance().SetFlashLightMode(false);
 
 		imageTrackablesMap.Clear();
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_MODE);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();

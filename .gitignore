@@ -7,3 +7,8 @@ MaxstARSDK_Unity_Sample.v12.suo
 MaxstARSDK_Unity_Sample.sln
 MaxstARSDK_Unity_Sample.CSharp.csproj
 MaxstARSDK_Unity_Sample.CSharp.Editor.csproj
+Assembly-UnityScript.unityproj
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
+test.apk
+obj/Debug/
