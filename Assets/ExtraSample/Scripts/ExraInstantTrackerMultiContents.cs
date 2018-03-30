@@ -8,11 +8,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 using maxstAR;
 
 public class ExraInstantTrackerMultiContents : MonoBehaviour
 {
+	[SerializeField] 
+	private EventSystem eventSystem;
+
 	[SerializeField]
 	private Text startBtnText = null;
 
@@ -75,11 +79,37 @@ public class ExraInstantTrackerMultiContents : MonoBehaviour
 		#if UNITY_EDITOR
 		if (Input.GetMouseButton(0))
 		{
+			PointerEventData eventData = new PointerEventData(EventSystem.current);
+			eventData.position = Input.mousePosition;
+			List<RaycastResult> raycastResults = new List<RaycastResult>();
+			EventSystem.current.RaycastAll(eventData, raycastResults);
+			if (raycastResults.Count > 0) {
+				for (int j = 0; j < raycastResults.Count; j++) {
+					Button btn = raycastResults [j].gameObject.GetComponent<Button> ();
+					if (btn == null) {
+						return;
+					}
+				}
+			}
+
 			touchSumPositions[id] = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(Input.mousePosition);
 		}
 		#else
 		if (Input.touchCount > 0)
 		{
+			PointerEventData eventData = new PointerEventData(EventSystem.current);
+			eventData.position = Input.GetTouch(0).position;
+			List<RaycastResult> raycastResults = new List<RaycastResult>();
+			EventSystem.current.RaycastAll(eventData, raycastResults);
+			if (raycastResults.Count > 0) {
+			for (int j = 0; j < raycastResults.Count; j++) {
+			Button btn = raycastResults [j].gameObject.GetComponent<Button> ();
+			if (btn == null) {
+			return;
+			}
+			}
+		}
+
 			UpdateTouchPositionDelta(id);
 		}
 		#endif

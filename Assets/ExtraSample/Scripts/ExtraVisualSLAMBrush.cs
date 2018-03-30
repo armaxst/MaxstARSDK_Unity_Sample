@@ -13,6 +13,9 @@ using maxstAR;
 
 public class ExtraVisualSLAMBrush : MonoBehaviour
 {
+	[SerializeField]
+	private Text startBtnText = null;
+
 	private bool cameraStartDone = false;
     private bool startTrackerDone = false;
 
@@ -94,6 +97,9 @@ public class ExtraVisualSLAMBrush : MonoBehaviour
 	public void Reset()
 	{
 		linePointCount = 0;
+		if (startBtnText != null) {
+			startBtnText.text = "Start Tracking";
+		}
 	}
 
 	void OnApplicationPause(bool pause)
@@ -121,6 +127,10 @@ public class ExtraVisualSLAMBrush : MonoBehaviour
 
 		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_SLAM);
 		TrackerManager.GetInstance().FindSurface();
+
+		if (startBtnText != null) {
+			startBtnText.text = "Stop Tracking";
+		}
 	}
 
 	public void QuitFindingSurface()
