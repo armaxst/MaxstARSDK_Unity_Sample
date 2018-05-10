@@ -20,6 +20,18 @@ public class VisualSLAMSample : MonoBehaviour
 
     public Slider progressSlider;
 
+    private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+    void Awake()
+    {
+        cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+        if (cameraBackgroundBehaviour == null)
+        {
+            Debug.LogError("Can't find CameraBackgroundBehaviour.");
+            return;
+        }
+    }
+
 	void Start()
 	{
         QualitySettings.vSyncCount = 0;
@@ -55,10 +67,12 @@ public class VisualSLAMSample : MonoBehaviour
 
 		EnableChildrenRenderer(false);
 
-		Debug.Log(TrackerManager.GetInstance ().GetGuideInfo ().GetInitializingProgress ().ToString());
-
+		progressSlider.value = TrackerManager.GetInstance ().GetGuideInfo ().GetInitializingProgress ();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
+
+        cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
+
 		TrackingResult trackingResult = state.GetTrackingResult();
 		if (trackingResult.GetCount() == 0)
 		{

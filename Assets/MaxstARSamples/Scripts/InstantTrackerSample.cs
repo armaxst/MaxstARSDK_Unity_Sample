@@ -24,8 +24,19 @@ public class InstantTrackerSample : MonoBehaviour
 	private bool findSurfaceDone = false;
 
 	private InstantTrackableBehaviour instantTrackable = null;
+    private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
-	void Start()
+    void Awake()
+    {
+        cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+        if (cameraBackgroundBehaviour == null)
+        {
+            Debug.LogError("Can't find CameraBackgroundBehaviour.");
+            return;
+        }
+    }
+
+    void Start()
 	{
 		instantTrackable = FindObjectOfType<InstantTrackableBehaviour>();
 		if (instantTrackable == null)
@@ -63,6 +74,9 @@ public class InstantTrackerSample : MonoBehaviour
 		}
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
+
+        cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
+
 		TrackingResult trackingResult = state.GetTrackingResult();
 
 		if (trackingResult.GetCount() == 0)

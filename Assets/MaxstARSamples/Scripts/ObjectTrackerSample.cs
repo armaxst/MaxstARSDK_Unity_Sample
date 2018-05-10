@@ -15,6 +15,18 @@ public class ObjectTrackerSample : MonoBehaviour
 	private bool startTrackerDone = false;
 	private bool cameraStartDone = false;
 
+    private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+    void Awake()
+    {
+        cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+        if (cameraBackgroundBehaviour == null)
+        {
+            Debug.LogError("Can't find CameraBackgroundBehaviour.");
+            return;
+        }
+    }
+
 	void Start()
 	{
 		objectTrackablesMap.Clear();
@@ -90,6 +102,8 @@ public class ObjectTrackerSample : MonoBehaviour
 		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
+
+        cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 		TrackingResult trackingResult = state.GetTrackingResult();
 
 		for (int i = 0; i < trackingResult.GetCount(); i++)

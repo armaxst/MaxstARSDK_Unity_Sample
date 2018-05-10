@@ -23,6 +23,18 @@ public class CodeScanSample : MonoBehaviour
 
 	private bool cameraStartDone = false;
 
+    private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+    void Awake()
+    {
+        cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+        if (cameraBackgroundBehaviour == null)
+        {
+            Debug.LogError("Can't find CameraBackgroundBehaviour.");
+            return;
+        }
+    }
+
 	void Start()
 	{
 		if (startScanBtn != null)
@@ -51,6 +63,9 @@ public class CodeScanSample : MonoBehaviour
 		}
 
         TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
+
+        cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
+
         string codeScanResult = state.GetCodeScanResult();
 		if (!codeScanResult.Equals("") && codeScanResult.Length > 0)
 		{

@@ -1,9 +1,9 @@
-static const char * VERTEX_SHADER_SRC_ES30	=
-	"#version 300 es\n"										\
-	"uniform highp mat4 u_mvpMatrix;\n"					\
-	"in highp vec4 a_position;\n"					\
-	"in highp vec2 a_vertexTexCoord;\n"					\
-	"out highp vec2 v_texCoord;\n"						\
+static const char * VERTEX_SHADER_SRC_GL120	=
+	"#version 120\n"								\
+	"attribute vec4 a_position;\n"					\
+	"attribute vec2 a_vertexTexCoord;\n"					\
+	"uniform mat4 u_mvpMatrix;\n"					\
+	"varying vec2 v_texCoord;\n"						\
 	"void main()\n"										\
 	"{\n"												\
 	"	gl_Position = u_mvpMatrix  * a_position;\n"		\
