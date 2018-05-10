@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class ExtraVisualSLAMBrush : MonoBehaviour
+public class ExtraVisualSLAMBrush : ARBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
@@ -26,6 +26,19 @@ public class ExtraVisualSLAMBrush : MonoBehaviour
 
 	private GameObject anchor = null;
 
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+	void Awake()
+	{
+		base.Awake();
+
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+		}
+	}
+
 	void Start()
 	{
         QualitySettings.vSyncCount = 0;
@@ -39,18 +52,8 @@ public class ExtraVisualSLAMBrush : MonoBehaviour
 		anchor = GameObject.Find ("AnchorPoint");
 	}
 
-    public void OnClickBackButton()
-    {
-        SceneStackManager.Instance.LoadPrevious();
-    }
-
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		StartCamera();
 
         if (!startTrackerDone)
@@ -63,6 +66,8 @@ public class ExtraVisualSLAMBrush : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 		TrackingResult trackingResult = state.GetTrackingResult();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
+
 		if (trackingResult.GetCount() == 0)
 		{
 			return;

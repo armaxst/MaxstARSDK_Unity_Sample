@@ -8,7 +8,7 @@ using System.Text;
 
 using maxstAR;
 
-public class AndroidExtensionSample : MonoBehaviour
+public class AndroidExtensionSample : ARBehaviour
 {
 	private AndroidJavaObject currentActivity;
 	private AndroidJavaClass AndroidExtensionClass;
@@ -19,6 +19,17 @@ public class AndroidExtensionSample : MonoBehaviour
 	private bool resizeSurfaceToggle = false;
 
 	private ImageTrackableBehaviour imageTrackable;
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+	void Awake()
+	{
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+			return;
+		}
+	}
 
 	void Start()
 	{
@@ -45,11 +56,6 @@ public class AndroidExtensionSample : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		StartCamera();
 
 		if (!startTrackerDone)
@@ -60,6 +66,7 @@ public class AndroidExtensionSample : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 		TrackingResult trackingResult = state.GetTrackingResult();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		if (trackingResult.GetCount() == 0)
 		{

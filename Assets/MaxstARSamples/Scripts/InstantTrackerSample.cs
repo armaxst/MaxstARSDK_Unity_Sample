@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class InstantTrackerSample : MonoBehaviour
+public class InstantTrackerSample : ARBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
@@ -28,6 +28,8 @@ public class InstantTrackerSample : MonoBehaviour
 
     void Awake()
     {
+		base.Awake();
+
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
         {
@@ -47,18 +49,8 @@ public class InstantTrackerSample : MonoBehaviour
 		instantTrackable.OnTrackFail();
 	}
 
-    public void OnClickBackButton()
-    {
-        SceneStackManager.Instance.LoadPrevious();
-    }
-
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		if (instantTrackable == null)
 		{
 			return;

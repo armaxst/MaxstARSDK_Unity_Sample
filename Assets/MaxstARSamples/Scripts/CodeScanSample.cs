@@ -14,7 +14,7 @@ using System.Collections;
 
 using maxstAR;
 
-public class CodeScanSample : MonoBehaviour
+public class CodeScanSample : ARBehaviour
 {
 	public Text codeFormatText;
 	public Text codeValueText;
@@ -27,6 +27,8 @@ public class CodeScanSample : MonoBehaviour
 
     void Awake()
     {
+		base.Awake();
+
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
         {
@@ -45,18 +47,8 @@ public class CodeScanSample : MonoBehaviour
 		StartCodeScan();
 	}
 
-    public void OnClickBackButton()
-    {
-        SceneStackManager.Instance.LoadPrevious();
-    }
-
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		if (!cameraStartDone)
 		{
 			StartCamera();

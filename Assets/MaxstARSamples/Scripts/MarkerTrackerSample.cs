@@ -8,7 +8,7 @@ using System.Text;
 
 using maxstAR;
 
-public class MarkerTrackerSample : MonoBehaviour
+public class MarkerTrackerSample : ARBehaviour
 {
 	private Dictionary<int, MarkerTrackerBehaviour> markerTrackableMap =
 		new Dictionary<int, MarkerTrackerBehaviour>();
@@ -19,6 +19,8 @@ public class MarkerTrackerSample : MonoBehaviour
 
     void Awake()
     {
+		base.Awake();
+
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
         {
@@ -64,18 +66,8 @@ public class MarkerTrackerSample : MonoBehaviour
 		}
 	}
 
-    public void OnClickBackButton()
-    {
-        SceneStackManager.Instance.LoadPrevious();
-    }
-
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		StartCamera();
 
 		if (!startTrackerDone)

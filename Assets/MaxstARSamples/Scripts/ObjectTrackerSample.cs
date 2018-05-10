@@ -8,7 +8,7 @@ using System.Text;
 
 using maxstAR;
 
-public class ObjectTrackerSample : MonoBehaviour
+public class ObjectTrackerSample : ARBehaviour
 {
 	private Dictionary<string, ObjectTrackableBehaviour> objectTrackablesMap =
 	new Dictionary<string, ObjectTrackableBehaviour>();
@@ -19,6 +19,8 @@ public class ObjectTrackerSample : MonoBehaviour
 
     void Awake()
     {
+		base.Awake();
+
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
         {
@@ -79,18 +81,8 @@ public class ObjectTrackerSample : MonoBehaviour
 		}
 	}
 
-    public void OnClickBackButton()
-    {
-        SceneStackManager.Instance.LoadPrevious();
-    }
-
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		StartCamera();
 
 		if (!startTrackerDone)

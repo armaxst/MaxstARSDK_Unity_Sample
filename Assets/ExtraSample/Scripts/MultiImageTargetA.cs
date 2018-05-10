@@ -5,13 +5,26 @@ using UnityEngine.SceneManagement;
 
 using maxstAR;
 
-public class MultiImageTargetA : MonoBehaviour
+public class MultiImageTargetA : ARBehaviour
 {
 	private Dictionary<string, ImageTrackableBehaviour> imageTrackablesMap =
 		new Dictionary<string, ImageTrackableBehaviour>();
 
 	private bool startTrackerDone = false;
 	public ARManager arManagerObject;
+
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+	void Awake()
+	{
+		base.Awake();
+
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+		}
+	}
 
 	void Start()
 	{
@@ -70,11 +83,6 @@ public class MultiImageTargetA : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		if (!startTrackerDone)
 		{
 			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_IMAGE);
@@ -85,6 +93,7 @@ public class MultiImageTargetA : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 		TrackingResult trackingResult = state.GetTrackingResult();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		for (int i = 0; i < trackingResult.GetCount(); i++)
 		{

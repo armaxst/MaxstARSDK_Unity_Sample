@@ -12,7 +12,7 @@ using UnityEngine.EventSystems;
 
 using maxstAR;
 
-public class ExraInstantTrackerMultiContents : MonoBehaviour
+public class ExraInstantTrackerMultiContents : ARBehaviour
 {
 	[SerializeField] 
 	private EventSystem eventSystem;
@@ -33,6 +33,19 @@ public class ExraInstantTrackerMultiContents : MonoBehaviour
 
 	private int id = 0;
 
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+	void Awake()
+	{
+		base.Awake();
+
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+		}
+	}
+
 	void Start ()
 	{
 		instantTrackables.Clear();
@@ -46,17 +59,8 @@ public class ExraInstantTrackerMultiContents : MonoBehaviour
 		}
 	}
 
-	public void OnClickBackButton ()
-	{
-		SceneStackManager.Instance.LoadPrevious ();
-	}
-
 	void Update ()
 	{
-		if (Input.GetKey (KeyCode.Escape)) {
-			SceneStackManager.Instance.LoadPrevious ();
-		}
-
 		StartCamera ();
 
 		if (!startTrackerDone) {
@@ -67,6 +71,7 @@ public class ExraInstantTrackerMultiContents : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance ().UpdateTrackingState ();
 		TrackingResult trackingResult = state.GetTrackingResult ();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		if (trackingResult.GetCount () == 0) {
 			foreach (var trackable in instantTrackables)

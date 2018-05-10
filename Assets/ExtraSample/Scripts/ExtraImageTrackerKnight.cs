@@ -4,7 +4,7 @@ using System.Text;
 
 using maxstAR;
 
-public class ExtraImageTrackerKnight : MonoBehaviour
+public class ExtraImageTrackerKnight : ARBehaviour
 {
 	[SerializeField]
 	private GameObject nonARObject = null;
@@ -13,6 +13,19 @@ public class ExtraImageTrackerKnight : MonoBehaviour
 		new Dictionary<string, ImageTrackableBehaviour>();
 	private bool startTrackerDone = false;
 	private bool cameraStartDone = false;
+
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+	void Awake()
+	{
+		base.Awake();
+
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+		}
+	}
 
 	void Start()
 	{
@@ -66,11 +79,6 @@ public class ExtraImageTrackerKnight : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		StartCamera();
 
 		if (!startTrackerDone)
@@ -83,6 +91,7 @@ public class ExtraImageTrackerKnight : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 		TrackingResult trackingResult = state.GetTrackingResult();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		for (int i = 0; i < trackingResult.GetCount(); i++)
 		{

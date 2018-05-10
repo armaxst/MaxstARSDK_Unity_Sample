@@ -13,3 +13,8 @@ Assembly-CSharp-Editor.csproj
 test.apk
 obj/Debug/
 MaxstARSDK_Unity_Sample.userprefs
+MaxstARSDK_Unity_Sample_github.CSharp.csproj
+MaxstARSDK_Unity_Sample_github.CSharp.Editor.csproj
+MaxstARSDK_Unity_Sample_github.v12.suo
+MaxstARSDK_Unity_Sample_github.sln
+*.apk

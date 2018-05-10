@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class VisualSLAMSample : MonoBehaviour
+public class VisualSLAMSample : ARBehaviour
 {
 	private string fileName = null;
 
@@ -24,6 +24,8 @@ public class VisualSLAMSample : MonoBehaviour
 
     void Awake()
     {
+		base.Awake();
+
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
         {
@@ -45,18 +47,8 @@ public class VisualSLAMSample : MonoBehaviour
 
 	}
 
-    public void OnClickBackButton()
-    {
-        SceneStackManager.Instance.LoadPrevious();
-    }
-
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		StartCamera();
 
         if (!startTrackerDone)

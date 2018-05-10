@@ -8,7 +8,7 @@ using System.Text;
 
 using maxstAR;
 
-public class CameraConfigurationSample : MonoBehaviour
+public class CameraConfigurationSample : ARBehaviour
 {
 	private Dictionary<string, ImageTrackableBehaviour> imageTrackablesMap =
 		new Dictionary<string, ImageTrackableBehaviour>();
@@ -19,6 +19,8 @@ public class CameraConfigurationSample : MonoBehaviour
 
     void Awake()
     {
+		base.Awake();
+
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
         {
@@ -77,18 +79,8 @@ public class CameraConfigurationSample : MonoBehaviour
 		}
 	}
 
-    public void OnClickBackButton()
-    {
-        SceneStackManager.Instance.LoadPrevious();
-    }
-
 	void Update()
 	{
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			SceneStackManager.Instance.LoadPrevious();
-		}
-
 		StartCamera();
 
 		if (!startTrackerDone)
@@ -100,10 +92,8 @@ public class CameraConfigurationSample : MonoBehaviour
 		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
-
-        cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
-
 		TrackingResult trackingResult = state.GetTrackingResult();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		for (int i = 0; i < trackingResult.GetCount(); i++)
 		{

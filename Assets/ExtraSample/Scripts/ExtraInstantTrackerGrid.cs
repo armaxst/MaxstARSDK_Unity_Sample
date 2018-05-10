@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class ExtraInstantTrackerGrid : MonoBehaviour
+public class ExtraInstantTrackerGrid : ARBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
@@ -32,6 +32,19 @@ public class ExtraInstantTrackerGrid : MonoBehaviour
 	private InstantPlaneGrid instantPlaneGrid;
 
     private Matrix4x4 planMatrix = Matrix4x4.identity;
+
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+	void Awake()
+	{
+		base.Awake();
+
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+		}
+	}
 
 	void Start()
 	{
@@ -66,6 +79,7 @@ public class ExtraInstantTrackerGrid : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 		TrackingResult trackingResult = state.GetTrackingResult();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		if (trackingResult.GetCount() == 0)
 		{

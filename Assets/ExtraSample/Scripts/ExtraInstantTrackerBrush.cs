@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 using maxstAR;
 
-public class ExtraInstantTrackerBrush : MonoBehaviour
+public class ExtraInstantTrackerBrush : ARBehaviour
 {
 	[SerializeField]
 	private Text startBtnText = null;
@@ -26,23 +26,27 @@ public class ExtraInstantTrackerBrush : MonoBehaviour
 	private Vector3 [] linePoint = new Vector3[100];
 	private int linePointCount = 0;
 
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+
+	void Awake()
+	{
+		base.Awake();
+
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+		}
+	}
+
 	void Start ()
 	{
 		instantTrackable = FindObjectOfType<InstantTrackableBehaviour>();
 		lineRenderer = instantTrackable.GetComponentInChildren<LineRenderer> ();
 	}
 
-	public void OnClickBackButton ()
-	{
-		SceneStackManager.Instance.LoadPrevious ();
-	}
-
 	void Update ()
 	{
-		if (Input.GetKey (KeyCode.Escape)) {
-			SceneStackManager.Instance.LoadPrevious ();
-		}
-
 		StartCamera ();
 
 		if (!startTrackerDone) {
@@ -53,6 +57,7 @@ public class ExtraInstantTrackerBrush : MonoBehaviour
 
 		TrackingState state = TrackerManager.GetInstance ().UpdateTrackingState ();
 		TrackingResult trackingResult = state.GetTrackingResult ();
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		if (trackingResult.GetCount () == 0) {
 			instantTrackable.OnTrackFail ();
