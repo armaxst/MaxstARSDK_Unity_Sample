@@ -16,6 +16,8 @@ public class CameraConfigurationSample : ARBehaviour
 	private bool cameraStartDone = false;
 
     private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+	public GameObject webCamTexturePlane;
+	public WebCamTexture webcamTexture;
 
     void Awake()
     {
@@ -31,6 +33,11 @@ public class CameraConfigurationSample : ARBehaviour
 
 	void Start()
 	{
+		webcamTexture = new WebCamTexture();
+		Renderer tempRrenderer = webCamTexturePlane.GetComponent<Renderer>();
+		tempRrenderer.material.mainTexture = webcamTexture;
+		webCamTexturePlane.SetActive(false);
+
 		imageTrackablesMap.Clear();
 		ImageTrackableBehaviour[] imageTrackables = FindObjectsOfType<ImageTrackableBehaviour>();
 		foreach (var trackable in imageTrackables)
@@ -40,6 +47,8 @@ public class CameraConfigurationSample : ARBehaviour
 		}
 
 		AddTrackerData();
+
+		StartCamera();
 	}
 
 	private void AddTrackerData()
@@ -81,8 +90,6 @@ public class CameraConfigurationSample : ARBehaviour
 
 	void Update()
 	{
-		StartCamera();
-
 		if (!startTrackerDone)
 		{
 			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_IMAGE);
@@ -166,10 +173,22 @@ public class CameraConfigurationSample : ARBehaviour
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();
+
+		if (webCamTexturePlane != null)
+		{
+			webCamTexturePlane.SetActive(false);
+			webcamTexture.Stop();
+		}
 	}
 
-	void StartCamera()
+	public void StartCamera()
 	{
+		if (webCamTexturePlane != null)
+		{
+			webCamTexturePlane.SetActive(false);
+			webcamTexture.Stop();
+		} 
+		
 		if (!cameraStartDone)
 		{
 			Debug.Log("Unity StartCamera");
@@ -182,13 +201,23 @@ public class CameraConfigurationSample : ARBehaviour
 		}
 	}
 
-	void StopCamera()
+	public void StopCamera()
 	{
 		if (cameraStartDone)
 		{
 			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
+			ResultCode result =  CameraDevice.GetInstance().Stop();
+			if (result == ResultCode.Success)
+			{
+				cameraStartDone = false;
+				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);  // For ODG-R7 preventing camera flickering
+
+				if (webCamTexturePlane != null)
+				{
+					webCamTexturePlane.SetActive(true);
+					webcamTexture.Play();
+				}
+			}
 		}
 	}
 }

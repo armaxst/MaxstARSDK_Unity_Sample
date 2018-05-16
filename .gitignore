@@ -18,3 +18,7 @@ MaxstARSDK_Unity_Sample_github.CSharp.Editor.csproj
 MaxstARSDK_Unity_Sample_github.v12.suo
 MaxstARSDK_Unity_Sample_github.sln
 *.apk
+MaxstARSDK_Unity_Sample_github(maxstdev).v12.suo
+MaxstARSDK_Unity_Sample_github(maxstdev).CSharp.csproj
+MaxstARSDK_Unity_Sample_github(maxstdev).sln
+MaxstARSDK_Unity_Sample_github(maxstdev).CSharp.Editor.csproj
