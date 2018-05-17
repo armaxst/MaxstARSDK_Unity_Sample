@@ -1,10 +1,14 @@
-static const char * FRAGMENT_SHADER_SRC_ES30 =
-	"#version 300 es\n"								\
-	"in lowp vec4 v_color;\n"					\
-	"out lowp vec4 fragColor;\n"				\
+static const char * FRAGMENT_SHADER_SRC_GL120 =
+	"#version 120\n"								\
+	"varying vec4 v_color;\n"					\
 	"void main()\n"									\
 	"{\n"											\
-	"	fragColor = v_color;\n"					\
+	"	gl_FragColor = v_color;\n"					\
+	"}\n";
+
+
+
+or = v_color;\n"					\
 	"}\n";
 
 
