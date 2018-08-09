@@ -15,16 +15,13 @@ public class VisualSLAMSample : ARBehaviour
 {
 	private string fileName = null;
 
-	private bool cameraStartDone = false;
-    private bool startTrackerDone = false;
-
     public Slider progressSlider;
 
     private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
     void Awake()
     {
-		base.Awake();
+		Init();
 
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
@@ -43,20 +40,12 @@ public class VisualSLAMSample : ARBehaviour
 
 		fileName = Application.persistentDataPath + "/3dmap/Sample.3dmap";
 
+		StartCamera();
 		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_SLAM);
-
 	}
 
 	void Update()
 	{
-		StartCamera();
-
-        if (!startTrackerDone)
-        {
-            TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_SLAM);
-            startTrackerDone = true;
-        }
-
 		EnableChildrenRenderer(false);
 
 		progressSlider.value = TrackerManager.GetInstance ().GetGuideInfo ().GetInitializingProgress ();
@@ -86,8 +75,12 @@ public class VisualSLAMSample : ARBehaviour
 		if (pause)
 		{
 			TrackerManager.GetInstance().StopTracker();
-            startTrackerDone = false;
 			StopCamera();
+		}
+		else
+		{
+			StartCamera();
+			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_SLAM);
 		}
 	}
 
@@ -172,29 +165,15 @@ public class VisualSLAMSample : ARBehaviour
 		}
 	}
 
-	void StartCamera()
+	private void StartCameraInternal()
 	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				SensorDevice.GetInstance().Start();
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
+		StartCamera();
+		SensorDevice.GetInstance().Start();
 	}
 
-	void StopCamera()
+	private void StopCameraInternal()
 	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
-			SensorDevice.GetInstance().Stop();
-		}
+		StopCamera();
+		SensorDevice.GetInstance().Stop();
 	}
 }

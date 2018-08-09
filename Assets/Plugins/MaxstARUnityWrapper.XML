@@ -9,17 +9,17 @@
             Initialize system environment with app key, screen size and orientation
             </summary>
         </member>
-        <member name="M:maxstAR.AbstractARManager.Awake">
+        <member name="M:maxstAR.AbstractARManager.Init">
             <summary>
             Intialize sdk
             </summary>
         </member>
-        <member name="M:maxstAR.AbstractARManager.Init">
+        <member name="M:maxstAR.AbstractARManager.InitInternal">
             <summary>
             Set device orientation and surface size
             </summary>
         </member>
-        <member name="M:maxstAR.AbstractARManager.OnDestroy">
+        <member name="M:maxstAR.AbstractARManager.Deinit">
             <summary>
             Release sdk
             </summary>
@@ -57,6 +57,12 @@
             Handles native background rendering. Background rendering includes camera image,
             feature point, slam initialization progress bar, watermark, surface mesh
             </summary>
+        </member>
+        <member name="M:maxstAR.AbstractCameraBackgroundBehaviour.UpdateCameraBackgroundImage(maxstAR.TrackingState)">
+            <summary>
+            Render camera background image with tracked frame
+            </summary>
+            <param name="state">TrackingState</param>
         </member>
         <member name="T:maxstAR.AbstractImageTrackableBehaviour">
             <summary>
@@ -205,6 +211,12 @@
             image data which is used for tracker and rendering
             </summary>
         </member>
+        <member name="M:maxstAR.TrackedImage.GetIndex">
+            <summary>
+            Get image index
+            </summary>
+            <returns>image index</returns>
+        </member>
         <member name="M:maxstAR.TrackedImage.GetWidth">
             <summary>
             Get width
@@ -231,9 +243,15 @@
         </member>
         <member name="M:maxstAR.TrackedImage.GetData">
             <summary>
-            Image byte array
+            Get image data which used tracking engine
             </summary>
-            <returns></returns>
+            <returns>Image byte array</returns>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetDataPtr">
+            <summary>
+            Get image data which used tracking engine
+            </summary>
+            <returns>Image data pointer with native address</returns>
         </member>
         <member name="T:maxstAR.MapRendererBehaviour">
             <summary>
@@ -507,6 +525,26 @@
             Camera is alreay opened
             </summary>
         </member>
+        <member name="F:maxstAR.ResultCode.CameraAccessException">
+            <summary>
+            Camera access exception
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraNotExist">
+            <summary>
+            Camera not exist
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraOpenTimeOut">
+            <summary>
+            Camera open timeout
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.FlashLightUnsupported">
+            <summary>
+            Flash light is not supported
+            </summary>
+        </member>
         <member name="F:maxstAR.ResultCode.TrackerAlreadyStarted">
             <summary>
             Tracker already started
@@ -632,6 +670,24 @@
             </summary>
             <returns>get camera preview height</returns>
         </member>
+        <member name="M:maxstAR.CameraDevice.GetProjectionMatrix">
+            <summary>
+            Get projection matrix
+            </summary>
+            <returns>Matrix4x4 projection matrix</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.IsFlipHorizontal">
+            <summary>
+            Get flip state
+            </summary>
+            <returns>Horizontal flip</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.IsFlipVertical">
+            <summary>
+            Get flip state
+            </summary>
+            <returns>Vertical flip</returns>
+        </member>
         <member name="T:maxstAR.CameraDevice.FocusMode">
             <summary>
             Camera focus mode
@@ -701,12 +757,6 @@
             <summary>
             Matrix converting utililty class
             </summary>
-        </member>
-        <member name="M:maxstAR.MatrixUtils.getProjectionMatrix">
-            <summary>
-            Get projection matrix. This is used for augmented objects projection and background rendering
-            </summary>
-            <returns>Unity matrix</returns>
         </member>
         <member name="M:maxstAR.MatrixUtils.PositionFromMatrix(UnityEngine.Matrix4x4)">
             <summary>

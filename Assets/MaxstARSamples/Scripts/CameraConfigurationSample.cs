@@ -12,16 +12,12 @@ public class CameraConfigurationSample : ARBehaviour
 {
 	private Dictionary<string, ImageTrackableBehaviour> imageTrackablesMap =
 		new Dictionary<string, ImageTrackableBehaviour>();
-	private bool startTrackerDone = false;
-	private bool cameraStartDone = false;
 
     private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
-	public GameObject webCamTexturePlane;
-	public WebCamTexture webcamTexture;
 
     void Awake()
     {
-		base.Awake();
+		Init();
 
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
@@ -33,11 +29,6 @@ public class CameraConfigurationSample : ARBehaviour
 
 	void Start()
 	{
-		webcamTexture = new WebCamTexture();
-		Renderer tempRrenderer = webCamTexturePlane.GetComponent<Renderer>();
-		tempRrenderer.material.mainTexture = webcamTexture;
-		webCamTexturePlane.SetActive(false);
-
 		imageTrackablesMap.Clear();
 		ImageTrackableBehaviour[] imageTrackables = FindObjectsOfType<ImageTrackableBehaviour>();
 		foreach (var trackable in imageTrackables)
@@ -49,6 +40,7 @@ public class CameraConfigurationSample : ARBehaviour
 		AddTrackerData();
 
 		StartCamera();
+		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_IMAGE);
 	}
 
 	private void AddTrackerData()
@@ -90,12 +82,6 @@ public class CameraConfigurationSample : ARBehaviour
 
 	void Update()
 	{
-		if (!startTrackerDone)
-		{
-			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_IMAGE);
-			startTrackerDone = true;
-		}
-
 		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
@@ -159,8 +145,12 @@ public class CameraConfigurationSample : ARBehaviour
 		if (pause)
 		{
 			TrackerManager.GetInstance().StopTracker();
-			startTrackerDone = false;
 			StopCamera();
+		}
+		else
+		{
+			StartCamera();
+			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_IMAGE);
 		}
 	}
 
@@ -173,51 +163,5 @@ public class CameraConfigurationSample : ARBehaviour
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();
-
-		if (webCamTexturePlane != null)
-		{
-			webCamTexturePlane.SetActive(false);
-			webcamTexture.Stop();
-		}
-	}
-
-	public void StartCamera()
-	{
-		if (webCamTexturePlane != null)
-		{
-			webCamTexturePlane.SetActive(false);
-			webcamTexture.Stop();
-		} 
-		
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);  // For ODG-R7 preventing camera flickering
-			}
-		}
-	}
-
-	public void StopCamera()
-	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			ResultCode result =  CameraDevice.GetInstance().Stop();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = false;
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);  // For ODG-R7 preventing camera flickering
-
-				if (webCamTexturePlane != null)
-				{
-					webCamTexturePlane.SetActive(true);
-					webcamTexture.Play();
-				}
-			}
-		}
 	}
 }
