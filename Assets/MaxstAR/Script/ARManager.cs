@@ -8,9 +8,26 @@ namespace maxstAR
 {
 	public class ARManager : AbstractARManager
 	{
-		protected override void Awake()
+#if UNITY_ANDROID
+		private AndroidEngine androidEngine = null;
+#endif
+
+		void Awake()
 		{
-            base.Awake();
+            base.Init();
+
+#if UNITY_ANDROID
+			androidEngine = new AndroidEngine();
+#endif
         }
+
+		void OnDestroy()
+		{
+			base.Deinit();
+
+#if UNITY_ANDROID
+			androidEngine = null;
+#endif
+		}
 	}
 }

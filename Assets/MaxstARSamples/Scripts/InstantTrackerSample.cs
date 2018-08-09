@@ -18,9 +18,6 @@ public class InstantTrackerSample : ARBehaviour
 
 	private Vector3 touchToWorldPosition = Vector3.zero;
 	private Vector3 touchSumPosition = Vector3.zero;
-
-	private bool startTrackerDone = false;
-	private bool cameraStartDone = false;
 	private bool findSurfaceDone = false;
 
 	private InstantTrackableBehaviour instantTrackable = null;
@@ -28,7 +25,7 @@ public class InstantTrackerSample : ARBehaviour
 
     void Awake()
     {
-		base.Awake();
+		Init();
 
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
@@ -47,6 +44,10 @@ public class InstantTrackerSample : ARBehaviour
 		}
 
 		instantTrackable.OnTrackFail();
+		StartCamera();
+
+		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_INSTANT);
+		SensorDevice.GetInstance().Start();
 	}
 
 	void Update()
@@ -54,15 +55,6 @@ public class InstantTrackerSample : ARBehaviour
 		if (instantTrackable == null)
 		{
 			return;
-		}
-
-		StartCamera();
-
-		if (!startTrackerDone)
-		{
-			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_INSTANT);
-			SensorDevice.GetInstance().Start();
-			startTrackerDone = true;
 		}
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
@@ -109,8 +101,13 @@ public class InstantTrackerSample : ARBehaviour
 		{
 			SensorDevice.GetInstance().Stop();
 			TrackerManager.GetInstance().StopTracker();
-			startTrackerDone = false;
 			StopCamera();
+		}
+		else
+		{
+			StartCamera();
+			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_INSTANT);
+			SensorDevice.GetInstance().Start();
 		}
 	}
 
@@ -120,30 +117,6 @@ public class InstantTrackerSample : ARBehaviour
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();
-	}
-
-	void StartCamera()
-	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
-	}
-
-	void StopCamera()
-	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
-		}
 	}
 
 	public void OnClickStart()

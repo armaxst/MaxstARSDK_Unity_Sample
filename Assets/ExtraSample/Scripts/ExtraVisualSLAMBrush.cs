@@ -16,7 +16,6 @@ public class ExtraVisualSLAMBrush : ARBehaviour
 	[SerializeField]
 	private Text startBtnText = null;
 
-	private bool cameraStartDone = false;
     private bool startTrackerDone = false;
 
 	private Vector3 [] linePoint = new Vector3[100];
@@ -30,12 +29,13 @@ public class ExtraVisualSLAMBrush : ARBehaviour
 
 	void Awake()
 	{
-		base.Awake();
+		Init();
 
 		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
 		if (cameraBackgroundBehaviour == null)
 		{
 			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+			return;
 		}
 	}
 
@@ -151,32 +151,6 @@ public class ExtraVisualSLAMBrush : ARBehaviour
 		foreach (Renderer component in rendererComponents)
 		{
 			component.enabled = activate;
-		}
-	}
-
-	void StartCamera()
-	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				SensorDevice.GetInstance().Start();
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
-	}
-
-	void StopCamera()
-	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
-			SensorDevice.GetInstance().Stop();
 		}
 	}
 }

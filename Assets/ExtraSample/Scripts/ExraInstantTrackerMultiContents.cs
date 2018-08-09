@@ -14,7 +14,7 @@ using maxstAR;
 
 public class ExraInstantTrackerMultiContents : ARBehaviour
 {
-	[SerializeField] 
+	[SerializeField]
 	private EventSystem eventSystem;
 
 	[SerializeField]
@@ -23,13 +23,12 @@ public class ExraInstantTrackerMultiContents : ARBehaviour
 	public GameObject cube = null;
 
 	private bool startTrackerDone = false;
-	private bool cameraStartDone = false;
 	private bool findSurfaceDone = false;
 
 	private List<InstantTrackableBehaviour> instantTrackables = new List<InstantTrackableBehaviour>();
 
-	private List<Vector3> touchToWorldPositions = new List<Vector3> ();
-	private List<Vector3> touchSumPositions = new List<Vector3> ();
+	private List<Vector3> touchToWorldPositions = new List<Vector3>();
+	private List<Vector3> touchSumPositions = new List<Vector3>();
 
 	private int id = 0;
 
@@ -37,51 +36,54 @@ public class ExraInstantTrackerMultiContents : ARBehaviour
 
 	void Awake()
 	{
-		base.Awake();
+		Init();
 
 		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
 		if (cameraBackgroundBehaviour == null)
 		{
 			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+			return;
 		}
 	}
 
-	void Start ()
+	void Start()
 	{
 		instantTrackables.Clear();
 		InstantTrackableBehaviour[] trackables = FindObjectsOfType<InstantTrackableBehaviour>();
 		foreach (var trackable in trackables)
 		{
-			trackable.OnTrackFail ();
-			instantTrackables.Add (trackable);
-			touchToWorldPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
-			touchSumPositions.Add (new Vector3 (0.0f, 0.0f, 0.0f));
+			trackable.OnTrackFail();
+			instantTrackables.Add(trackable);
+			touchToWorldPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
+			touchSumPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
 		}
 	}
 
-	void Update ()
+	void Update()
 	{
-		StartCamera ();
+		StartCamera();
 
-		if (!startTrackerDone) {
-			TrackerManager.GetInstance ().StartTracker (TrackerManager.TRACKER_TYPE_INSTANT);
-			SensorDevice.GetInstance ().Start ();
+		if (!startTrackerDone)
+		{
+			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_INSTANT);
+			SensorDevice.GetInstance().Start();
 			startTrackerDone = true;
 		}
 
-		TrackingState state = TrackerManager.GetInstance ().UpdateTrackingState ();
-		TrackingResult trackingResult = state.GetTrackingResult ();
+		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
+		TrackingResult trackingResult = state.GetTrackingResult();
 		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
-		if (trackingResult.GetCount () == 0) {
+		if (trackingResult.GetCount() == 0)
+		{
 			foreach (var trackable in instantTrackables)
 			{
-				trackable.OnTrackFail ();
+				trackable.OnTrackFail();
 			}
 			return;
-		}	
+		}
 
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		if (Input.GetMouseButton(0))
 		{
 			PointerEventData eventData = new PointerEventData(EventSystem.current);
@@ -99,30 +101,34 @@ public class ExraInstantTrackerMultiContents : ARBehaviour
 
 			touchSumPositions[id] = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(Input.mousePosition);
 		}
-		#else
+#else
 		if (Input.touchCount > 0)
 		{
 			PointerEventData eventData = new PointerEventData(EventSystem.current);
 			eventData.position = Input.GetTouch(0).position;
 			List<RaycastResult> raycastResults = new List<RaycastResult>();
 			EventSystem.current.RaycastAll(eventData, raycastResults);
-			if (raycastResults.Count > 0) {
-			for (int j = 0; j < raycastResults.Count; j++) {
-			Button btn = raycastResults [j].gameObject.GetComponent<Button> ();
-			if (btn == null) {
-			return;
+			if (raycastResults.Count > 0)
+			{
+				for (int j = 0; j < raycastResults.Count; j++)
+				{
+					Button btn = raycastResults[j].gameObject.GetComponent<Button>();
+					if (btn == null)
+					{
+						return;
+					}
+				}
 			}
-			}
-		}
 
 			UpdateTouchPositionDelta(id);
 		}
-		#endif
+#endif
 
-		for (int i = 0; i < instantTrackables.Count; i++) {
-			Trackable track = trackingResult.GetTrackable (0);
-			Matrix4x4 poseMatrix = track.GetPose () * Matrix4x4.Translate (touchSumPositions[i]);
-			instantTrackables[i].OnTrackSuccess (track.GetId (), track.GetName (), poseMatrix);
+		for (int i = 0; i < instantTrackables.Count; i++)
+		{
+			Trackable track = trackingResult.GetTrackable(0);
+			Matrix4x4 poseMatrix = track.GetPose() * Matrix4x4.Translate(touchSumPositions[i]);
+			instantTrackables[i].OnTrackSuccess(track.GetId(), track.GetName(), poseMatrix);
 		}
 	}
 
@@ -133,12 +139,12 @@ public class ExraInstantTrackerMultiContents : ARBehaviour
 			case TouchPhase.Began:
 				touchToWorldPositions[id] = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(Input.GetTouch(0).position);
 				break;
-			
+
 			case TouchPhase.Moved:
 				Vector3 currentWorldPosition = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(Input.GetTouch(0).position);
 				touchSumPositions[id] += (currentWorldPosition - touchToWorldPositions[id]);
 				touchToWorldPositions[id] = currentWorldPosition;
-			break;
+				break;
 		}
 	}
 
@@ -157,60 +163,45 @@ public class ExraInstantTrackerMultiContents : ARBehaviour
 		id = 2;
 	}
 
-	void OnApplicationPause (bool pause)
+	void OnApplicationPause(bool pause)
 	{
-		if (pause) {
-			SensorDevice.GetInstance ().Stop ();
-			TrackerManager.GetInstance ().StopTracker ();
+		if (pause)
+		{
+			SensorDevice.GetInstance().Stop();
+			TrackerManager.GetInstance().StopTracker();
 			startTrackerDone = false;
-			StopCamera ();
+			StopCamera();
 		}
 	}
 
-	void OnDestroy ()
+	void OnDestroy()
 	{
-		SensorDevice.GetInstance ().Stop ();
-		TrackerManager.GetInstance ().StopTracker ();
-		TrackerManager.GetInstance ().DestroyTracker ();
-		StopCamera ();
+		SensorDevice.GetInstance().Stop();
+		TrackerManager.GetInstance().StopTracker();
+		TrackerManager.GetInstance().DestroyTracker();
+		StopCamera();
 	}
 
-	void StartCamera ()
+	public void OnClickStart()
 	{
-		if (!cameraStartDone) {
-			Debug.Log ("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance ().Start ();
-			if (result == ResultCode.Success) {
-				cameraStartDone = true;
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
-	}
-
-	void StopCamera ()
-	{
-		if (cameraStartDone) {
-			Debug.Log ("Unity StopCamera");
-			CameraDevice.GetInstance ().Stop ();
-			cameraStartDone = false;
-		}
-	}
-
-	public void OnClickStart ()
-	{
-		if (!findSurfaceDone) {
-			TrackerManager.GetInstance ().FindSurface ();
-			if (startBtnText != null) {
+		if (!findSurfaceDone)
+		{
+			TrackerManager.GetInstance().FindSurface();
+			if (startBtnText != null)
+			{
 				startBtnText.text = "Stop Tracking";
 			}
 			findSurfaceDone = true;
-			for (int i = 0 ; i < touchSumPositions.Count; i++)
+			for (int i = 0; i < touchSumPositions.Count; i++)
 			{
 				touchSumPositions[i] = Vector3.zero;
 			}
-		} else {
-			TrackerManager.GetInstance ().QuitFindingSurface ();
-			if (startBtnText != null) {
+		}
+		else
+		{
+			TrackerManager.GetInstance().QuitFindingSurface();
+			if (startBtnText != null)
+			{
 				startBtnText.text = "Start Tracking";
 			}
 			findSurfaceDone = false;

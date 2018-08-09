@@ -14,7 +14,6 @@ public class AndroidExtensionSample : ARBehaviour
 	private AndroidJavaClass AndroidExtensionClass;
 	private AndroidJavaObject AndroidExtensionObject;
 
-	private bool cameraStartDone = false;
 	private bool startTrackerDone = false;
 	private bool resizeSurfaceToggle = false;
 
@@ -126,29 +125,6 @@ public class AndroidExtensionSample : ARBehaviour
 			AndroidExtensionObject.Call("deinit");
 			AndroidExtensionObject.Dispose();
 			AndroidExtensionObject = null;
-		}
-	}
-
-	void StartCamera()
-	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-			}
-		}
-	}
-
-	void StopCamera()
-	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
 		}
 	}
 }

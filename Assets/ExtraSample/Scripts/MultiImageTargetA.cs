@@ -17,12 +17,13 @@ public class MultiImageTargetA : ARBehaviour
 
 	void Awake()
 	{
-		base.Awake();
+		Init();
 
 		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
 		if (cameraBackgroundBehaviour == null)
 		{
 			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+			return;
 		}
 	}
 

@@ -25,7 +25,6 @@ public class ExtraInstantTrackerGrid : ARBehaviour
 	private Vector3 touchSumPosition = Vector3.zero;
 
 	private bool startTrackerDone = false;
-	private bool cameraStartDone = false;
 	private bool findSurfaceDone = false;
 
 	private InstantTrackableBehaviour instantTrackable = null;
@@ -37,12 +36,13 @@ public class ExtraInstantTrackerGrid : ARBehaviour
 
 	void Awake()
 	{
-		base.Awake();
+		Init();
 
 		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
 		if (cameraBackgroundBehaviour == null)
 		{
 			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+			return;
 		}
 	}
 
@@ -139,30 +139,6 @@ public class ExtraInstantTrackerGrid : ARBehaviour
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();
-	}
-
-	void StartCamera()
-	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
-	}
-
-	void StopCamera()
-	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
-		}
 	}
 
 	public void OnClickStart()

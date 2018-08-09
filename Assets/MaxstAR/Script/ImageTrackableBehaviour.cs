@@ -15,6 +15,13 @@ namespace maxstAR
 {
     public class ImageTrackableBehaviour : AbstractImageTrackableBehaviour
     {
+		UnityEngine.Video.VideoPlayer videoPlayer;
+
+		void Start()
+		{
+			videoPlayer = GetComponentInChildren<UnityEngine.Video.VideoPlayer>();
+		}
+
 		public override void OnTrackSuccess(string id, string name, Matrix4x4 poseMatrix)
         {
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
@@ -34,6 +41,14 @@ namespace maxstAR
 
 			transform.position = MatrixUtils.PositionFromMatrix(poseMatrix);
 			transform.rotation = MatrixUtils.QuaternionFromMatrix(poseMatrix);
+
+			if (videoPlayer != null)
+			{
+				if (!videoPlayer.isPlaying)
+				{
+					videoPlayer.Play();
+				}
+			}
         }
 
         public override void OnTrackFail()
@@ -51,6 +66,14 @@ namespace maxstAR
 			foreach (Collider component in colliderComponents)
 			{
 				component.enabled = false;
+			}
+
+			if (videoPlayer != null)
+			{
+				if (videoPlayer.isPlaying)
+				{
+					videoPlayer.Pause();
+				}
 			}
         }
     }

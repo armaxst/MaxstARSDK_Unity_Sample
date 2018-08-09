@@ -12,14 +12,12 @@ public class MarkerTrackerSample : ARBehaviour
 {
 	private Dictionary<int, MarkerTrackerBehaviour> markerTrackableMap =
 		new Dictionary<int, MarkerTrackerBehaviour>();
-	private bool startTrackerDone = false;
-	private bool cameraStartDone = false;
 
     private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
     void Awake()
     {
-		base.Awake();
+		Init();
 
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
@@ -41,6 +39,8 @@ public class MarkerTrackerSample : ARBehaviour
             Debug.Log(trackable.TrackerDataFileName);
 		}
 		AddTrackerData();
+		StartCamera();
+		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_MARKER);
 	}
 
 	private void AddTrackerData()
@@ -68,14 +68,6 @@ public class MarkerTrackerSample : ARBehaviour
 
 	void Update()
 	{
-		StartCamera();
-
-		if (!startTrackerDone)
-		{
-			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_MARKER);
-			startTrackerDone = true;
-		}
-
 		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
@@ -107,8 +99,12 @@ public class MarkerTrackerSample : ARBehaviour
 		if (pause)
 		{
 			TrackerManager.GetInstance().StopTracker();
-			startTrackerDone = false;
 			StopCamera();
+		}
+		else
+		{
+			StartCamera();
+			TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_MARKER);			
 		}
 	}
 
@@ -118,29 +114,5 @@ public class MarkerTrackerSample : ARBehaviour
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();
-	}
-
-	void StartCamera()
-	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
-	}
-
-	void StopCamera()
-	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
-		}
 	}
 }

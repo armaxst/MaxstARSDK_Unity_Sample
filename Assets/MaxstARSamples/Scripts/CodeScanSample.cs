@@ -21,13 +21,11 @@ public class CodeScanSample : ARBehaviour
 	public Button startScanBtn;
 	private Text btnText;
 
-	private bool cameraStartDone = false;
-
     private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
     void Awake()
     {
-		base.Awake();
+		Init();
 
         cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
         if (cameraBackgroundBehaviour == null)
@@ -45,15 +43,11 @@ public class CodeScanSample : ARBehaviour
 		}
 
 		StartCodeScan();
+		StartCameraInternal();
 	}
 
 	void Update()
 	{
-		if (!cameraStartDone)
-		{
-			StartCamera();
-		}
-
         TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 
         cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
@@ -81,7 +75,12 @@ public class CodeScanSample : ARBehaviour
 			TrackerManager.GetInstance().StopTracker();
 			startScanBtn.interactable = true;
 			btnText.text = "Start Scan";
-			StopCamera();
+			StopCameraInternal();
+		}
+		else
+		{
+			StartCodeScan();
+			StartCameraInternal();
 		}
 	}
 
@@ -89,7 +88,7 @@ public class CodeScanSample : ARBehaviour
 	{
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
-		StopCamera();
+		StopCameraInternal();
 	}
 
 	public void StartCodeScan()
@@ -101,30 +100,16 @@ public class CodeScanSample : ARBehaviour
 		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_CODE_SCANNER);
 	}
 
-	private void StartCamera()
+	private void StartCameraInternal()
 	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				StartCoroutine(AutoFocusCoroutine());
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
+		StartCamera();
+		StartCoroutine(AutoFocusCoroutine());
 	}
 
-	private void StopCamera()
+	private void StopCameraInternal()
 	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
-			StopCoroutine(AutoFocusCoroutine());
-		}
+		StopCamera();
+		StopCoroutine(AutoFocusCoroutine());
 	}
 
 	IEnumerator AutoFocusCoroutine()
