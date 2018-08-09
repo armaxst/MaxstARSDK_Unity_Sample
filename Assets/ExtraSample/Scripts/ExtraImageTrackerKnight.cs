@@ -12,7 +12,6 @@ public class ExtraImageTrackerKnight : ARBehaviour
 	private Dictionary<string, ImageTrackableBehaviour> imageTrackablesMap =
 		new Dictionary<string, ImageTrackableBehaviour>();
 	private bool startTrackerDone = false;
-	private bool cameraStartDone = false;
 
 	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
@@ -150,29 +149,5 @@ public class ExtraImageTrackerKnight : ARBehaviour
 		TrackerManager.GetInstance().StopTracker();
 		TrackerManager.GetInstance().DestroyTracker();
 		StopCamera();
-	}
-
-	void StartCamera()
-	{
-		if (!cameraStartDone)
-		{
-			Debug.Log("Unity StartCamera");
-			ResultCode result = CameraDevice.GetInstance().Start();
-			if (result == ResultCode.Success)
-			{
-				cameraStartDone = true;
-				//CameraDevice.GetInstance().SetAutoWhiteBalanceLock(true);   // For ODG-R7 preventing camera flickering
-			}
-		}
-	}
-
-	void StopCamera()
-	{
-		if (cameraStartDone)
-		{
-			Debug.Log("Unity StopCamera");
-			CameraDevice.GetInstance().Stop();
-			cameraStartDone = false;
-		}
 	}
 }
