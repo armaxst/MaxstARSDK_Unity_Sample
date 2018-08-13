@@ -44,8 +44,15 @@ namespace maxstAR
 
 			if (videoPlayer != null)
 			{
-				if (!videoPlayer.isPlaying)
+				if (!videoPlayer.isPrepared)
 				{
+					videoPlayer.Prepare();
+					return;
+				}
+
+				if (videoPlayer.isPrepared && !videoPlayer.isPlaying)
+				{
+					Debug.Log("Video Play");
 					videoPlayer.Play();
 				}
 			}
@@ -72,7 +79,8 @@ namespace maxstAR
 			{
 				if (videoPlayer.isPlaying)
 				{
-					videoPlayer.Pause();
+					Debug.Log("Video Stop");
+					videoPlayer.Stop();
 				}
 			}
         }
