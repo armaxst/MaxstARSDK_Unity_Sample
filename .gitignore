@@ -22,3 +22,7 @@ MaxstARSDK_Unity_Sample_github(maxstdev).v12.suo
 MaxstARSDK_Unity_Sample_github(maxstdev).CSharp.csproj
 MaxstARSDK_Unity_Sample_github(maxstdev).sln
 MaxstARSDK_Unity_Sample_github(maxstdev).CSharp.Editor.csproj
+MaxstARSDK_UnitySample(Github).sln
+MaxstARSDK_UnitySample(Github).csproj
+MaxstARSDK_UnitySample(Github).Editor.csproj
+.vs/
