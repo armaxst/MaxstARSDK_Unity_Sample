@@ -84,6 +84,10 @@ public class ImageTrackerSample : ARBehaviour
 
 	void Update()
 	{
+		foreach (var t in imageTrackablesMap)
+		{
+			t.Value.trackingResult = false;
+		}
 		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
@@ -97,7 +101,17 @@ public class ImageTrackerSample : ARBehaviour
 			Trackable trackable = trackingResult.GetTrackable(i);
 			imageTrackablesMap[trackable.GetName()].OnTrackSuccess(
 				trackable.GetId(), trackable.GetName(), trackable.GetPose());
+			ImageTrackableBehaviour behaviour = imageTrackablesMap[trackable.GetName()];
+			behaviour.trackingResult = true;
+			behaviour.trackableId = trackable.GetId();
+			behaviour.trackableName = trackable.GetName();
+			behaviour.trackablePose = trackable.GetPose();
 		}
+
+		//foreach (var t in imageTrackablesMap)
+		//{
+		//	t.Value.ApplyResult();
+		//}
 	}
 
 	public void SetNormalMode()
