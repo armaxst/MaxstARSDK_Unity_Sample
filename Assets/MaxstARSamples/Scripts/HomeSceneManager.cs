@@ -49,4 +49,9 @@ public class HomeSceneManager : MonoBehaviour
     {
         SceneStackManager.Instance.LoadScene("Home", "CameraConfiguration");
     }
+
+    public void OnCloudRecognizerClick()
+    {
+        SceneStackManager.Instance.LoadScene("Home", "CloudRecognizer");
+    }
 }

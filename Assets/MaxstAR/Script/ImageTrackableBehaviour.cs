@@ -15,11 +15,16 @@ namespace maxstAR
 {
     public class ImageTrackableBehaviour : AbstractImageTrackableBehaviour
     {
-		UnityEngine.Video.VideoPlayer videoPlayer;
+		public string trackableId { get; set; }
+		public string trackableName { get; set; }
+		public Matrix4x4 trackablePose { get; set; }
+		public bool result { get; set; }
 
-		void Start()
+		private TrackingEventHandler trackingEventHandler;
+
+		private void Awake()
 		{
-			videoPlayer = GetComponentInChildren<UnityEngine.Video.VideoPlayer>();
+			trackingEventHandler = GetComponent<TrackingEventHandler>();
 		}
 
 		public override void OnTrackSuccess(string id, string name, Matrix4x4 poseMatrix)
@@ -42,19 +47,9 @@ namespace maxstAR
 			transform.position = MatrixUtils.PositionFromMatrix(poseMatrix);
 			transform.rotation = MatrixUtils.QuaternionFromMatrix(poseMatrix);
 
-			if (videoPlayer != null)
+			if (trackingEventHandler != null)
 			{
-				if (!videoPlayer.isPrepared)
-				{
-					videoPlayer.Prepare();
-					return;
-				}
-
-				if (videoPlayer.isPrepared && !videoPlayer.isPlaying)
-				{
-					Debug.Log("Video Play");
-					videoPlayer.Play();
-				}
+				trackingEventHandler.OnTrackingSuccess();
 			}
         }
 
@@ -75,14 +70,22 @@ namespace maxstAR
 				component.enabled = false;
 			}
 
-			if (videoPlayer != null)
+			if (trackingEventHandler != null)
 			{
-				if (videoPlayer.isPlaying)
-				{
-					Debug.Log("Video Stop");
-					videoPlayer.Stop();
-				}
+				trackingEventHandler.OnTrackingFail();
 			}
-        }
+		}
+
+		public void ApplyResult()
+		{
+			if (result == true)
+			{
+				OnTrackSuccess(trackableId, trackableName, trackablePose);
+			}
+			else
+			{
+				OnTrackFail();
+			}
+		}
     }
 }

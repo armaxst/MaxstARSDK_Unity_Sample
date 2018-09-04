@@ -19,6 +19,8 @@ public class VisualSLAMSample : ARBehaviour
 
     private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
+    private Vector3 translatePosition = new Vector3(0, 0, 0);
+
     void Awake()
     {
 		Init();
@@ -33,6 +35,7 @@ public class VisualSLAMSample : ARBehaviour
 
 	void Start()
 	{
+        //Debug.Log("width : " + Screen. + "  height : " + Screen.currentResolution.height);
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
@@ -60,6 +63,10 @@ public class VisualSLAMSample : ARBehaviour
 			return;
 		}
 
+        if(Input.GetMouseButton(0)) {
+            moveContent(Input.mousePosition);
+        }
+
 		EnableChildrenRenderer(true);
 
 		Trackable trackable = trackingResult.GetTrackable(0);
@@ -68,7 +75,15 @@ public class VisualSLAMSample : ARBehaviour
 		transform.position = MatrixUtils.PositionFromMatrix(poseMatrix);
 		transform.rotation = MatrixUtils.QuaternionFromMatrix(poseMatrix);
 		transform.localScale = MatrixUtils.ScaleFromMatrix(poseMatrix);
+
+        transform.Translate(translatePosition);
 	}
+
+    void moveContent(Vector2 movePosition) 
+    {
+        Vector3 worldPosition = TrackerManager.GetInstance().GetWorldPositionFromScreenCoordinate(movePosition);
+        translatePosition = worldPosition;
+    }
 
 	void OnApplicationPause(bool pause)
 	{
