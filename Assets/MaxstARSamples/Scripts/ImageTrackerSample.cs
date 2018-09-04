@@ -13,24 +13,24 @@ public class ImageTrackerSample : ARBehaviour
 	private Dictionary<string, ImageTrackableBehaviour> imageTrackablesMap =
 		new Dictionary<string, ImageTrackableBehaviour>();
 
-    private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
-    void Awake()
-    {
+	void Awake()
+	{
 		Init();
 
-        cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
-        if (cameraBackgroundBehaviour == null)
-        {
-            Debug.LogError("Can't find CameraBackgroundBehaviour.");
-            return;
-        }
-    }
+		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+		if (cameraBackgroundBehaviour == null)
+		{
+			Debug.LogError("Can't find CameraBackgroundBehaviour.");
+			return;
+		}
+	}
 
 	void Start()
 	{
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
+		QualitySettings.vSyncCount = 0;
+		Application.targetFrameRate = 60;
 
 		imageTrackablesMap.Clear();
 		ImageTrackableBehaviour[] imageTrackables = FindObjectsOfType<ImageTrackableBehaviour>();
@@ -43,6 +43,23 @@ public class ImageTrackerSample : ARBehaviour
 		AddTrackerData();
 		TrackerManager.GetInstance().StartTracker(TrackerManager.TRACKER_TYPE_IMAGE);
 		StartCamera();
+
+		// For see through smart glass setting
+		if (ConfigurationScriptableObject.GetInstance().WearableType == WearableCalibration.WearableType.OpticalSeeThrough)
+		{
+			WearableManager.GetInstance().GetDeviceController().SetStereoMode(true);
+
+			CameraBackgroundBehaviour cameraBackground = FindObjectOfType<CameraBackgroundBehaviour>();
+			cameraBackground.gameObject.SetActive(false);
+
+			WearableManager.GetInstance().GetCalibration().CreateWearableEye(Camera.main.transform);
+
+			// BT-300 screen is splited in half size, but R-7 screen is doubled.
+			if (WearableManager.GetInstance().GetDeviceController().IsSideBySideType() == true)
+			{
+				// Do something here. For example resize gui to fit ratio
+			}
+		}
 	}
 
 	private void AddTrackerData()
@@ -74,49 +91,38 @@ public class ImageTrackerSample : ARBehaviour
 		TrackerManager.GetInstance().LoadTrackerData();
 	}
 
-	private void DisableAllTrackables()
-	{
-		foreach (var trackable in imageTrackablesMap)
-		{
-			trackable.Value.OnTrackFail();
-		}
-	}
-
 	void Update()
 	{
 		foreach (var t in imageTrackablesMap)
 		{
-			t.Value.trackingResult = false;
+			t.Value.result = false;
 		}
-		DisableAllTrackables();
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 
-        cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
+		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		TrackingResult trackingResult = state.GetTrackingResult();
 
 		for (int i = 0; i < trackingResult.GetCount(); i++)
 		{
 			Trackable trackable = trackingResult.GetTrackable(i);
-			imageTrackablesMap[trackable.GetName()].OnTrackSuccess(
-				trackable.GetId(), trackable.GetName(), trackable.GetPose());
-			ImageTrackableBehaviour behaviour = imageTrackablesMap[trackable.GetName()];
-			behaviour.trackingResult = true;
-			behaviour.trackableId = trackable.GetId();
-			behaviour.trackableName = trackable.GetName();
-			behaviour.trackablePose = trackable.GetPose();
+			var imageTrackable = imageTrackablesMap[trackable.GetName()];
+			imageTrackable.result = true;
+			imageTrackable.trackableId = trackable.GetId();
+			imageTrackable.trackableName = trackable.GetName();
+			imageTrackable.trackablePose = trackable.GetPose();
 		}
 
-		//foreach (var t in imageTrackablesMap)
-		//{
-		//	t.Value.ApplyResult();
-		//}
+		foreach (var t in imageTrackablesMap)
+		{
+			t.Value.ApplyResult();
+		}
 	}
 
 	public void SetNormalMode()
 	{
-        TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
+		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
 	}
 
 	public void SetExtendedMode()

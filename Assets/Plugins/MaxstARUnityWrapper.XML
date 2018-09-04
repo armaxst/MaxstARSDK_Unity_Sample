@@ -1,0 +1,995 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MaxstARUnityWrapper</name>
+    </assembly>
+    <members>
+        <member name="T:maxstAR.AbstractARManager">
+            <summary>
+            Initialize system environment with app key, screen size and orientation
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractARManager.Init">
+            <summary>
+            Intialize sdk
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractARManager.InitInternal">
+            <summary>
+            Set device orientation and surface size
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractARManager.Deinit">
+            <summary>
+            Release sdk
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractARManager.SetWorldCenterMode(maxstAR.AbstractARManager.WorldCenterMode)">
+            <summary>
+            Set world center mode
+            </summary>
+            <param name="worldCenterMode">World center enum value</param>
+        </member>
+        <member name="P:maxstAR.AbstractARManager.WorldCenterModeSetting">
+            <summary>
+            Get world center mode value
+            </summary>
+        </member>
+        <member name="T:maxstAR.AbstractARManager.WorldCenterMode">
+            <summary>
+            The world center mode defines what is the center in game view.
+            If camera is world center then trackable's transform is changed when tracking success.
+            If traget is world center then main camera's transform is chagned when tracking success.
+            </summary>
+        </member>
+        <member name="F:maxstAR.AbstractARManager.WorldCenterMode.CAMERA">
+            <summary>
+            Camera is world center
+            </summary>
+        </member>
+        <member name="F:maxstAR.AbstractARManager.WorldCenterMode.TARGET">
+            <summary>
+            Target is world center
+            </summary>
+        </member>
+        <member name="T:maxstAR.AbstractCameraBackgroundBehaviour">
+            <summary>
+            Handles native background rendering. Background rendering includes camera image,
+            feature point, slam initialization progress bar, watermark, surface mesh
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractCameraBackgroundBehaviour.UpdateCameraBackgroundImage(maxstAR.TrackingState)">
+            <summary>
+            Render camera background image with tracked frame
+            </summary>
+            <param name="state">TrackingState</param>
+        </member>
+        <member name="T:maxstAR.AbstractImageTrackableBehaviour">
+            <summary>
+            Handle tracking file definition in editor and runtime target image visibility
+            </summary>
+        </member>
+        <member name="T:maxstAR.AbstractTrackableBehaviour">
+            <summary>
+            Parent class of all TrackableBehaviour. Save tracking file's id (uuid), name, path etc.
+            All setting datas are for editor mode and runtime tracking result.
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractTrackableBehaviour.OnTrackerDataFileChanged(System.String)">
+            <summary>
+            To notify tracker file changed (Editor mode only)
+            </summary>
+            <param name="trackerFileName"></param>
+        </member>
+        <member name="M:maxstAR.AbstractTrackableBehaviour.OnTrackFail">
+            <summary>
+            Common interface to notify this target lost tracking. Child class can override this method
+            to receive tracking lost event
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractTrackableBehaviour.OnTrackSuccess(System.String,System.String,UnityEngine.Matrix4x4)">
+            <summary>
+            Common interface to notify this target tracking success. Child class can override this method
+            to receive tracking success event
+            </summary>
+            <param name="id">target's id (uuid)</param>
+            <param name="name">target's name (map file name without extension)</param>
+            <param name="poseMatrix">tracked pose matrix</param>
+        </member>
+        <member name="P:maxstAR.AbstractTrackableBehaviour.StorageType">
+            <summary>
+            If file is located in android assets folder or not
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractTrackableBehaviour.TrackerDataFileObject">
+            <summary>
+            Save tracking file object name in StreamingAssets folder (For editor mode)
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractTrackableBehaviour.TrackerDataFileName">
+            <summary>
+            Tracking file name
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractTrackableBehaviour.TrackableId">
+            <summary>
+            Tracking file uuid. This value is addressed in tracking file.
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractTrackableBehaviour.TrackableName">
+            <summary>
+            Tracking file name only without extention.
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractImageTrackableBehaviour.OnTrackerDataFileChanged(System.String)">
+            <summary>
+            Notify tracking file changed and change target image texture and scale, etc.
+            </summary>
+            <param name="trackerFileName"></param>
+        </member>
+        <member name="P:maxstAR.AbstractImageTrackableBehaviour.TargetWidth">
+            <summary>
+            Image target real width
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractImageTrackableBehaviour.TargetHeight">
+            <summary>
+            Image target real height
+            </summary>
+        </member>
+        <member name="T:maxstAR.AbstractInstantTrackableBehaviour">
+            <summary>
+            Serves only instant tracking mode
+            </summary>
+        </member>
+        <member name="T:maxstAR.AbstractWearableManager">
+            <summary>
+            Create stereo camera for optical see-through HMD
+            </summary>
+        </member>
+        <member name="T:maxstAR.ColorFormat">
+            <summary>
+            Camera image format
+            </summary>
+        </member>
+        <member name="F:maxstAR.ColorFormat.RGB888">
+            <summary>
+            RGB 24
+            </summary>
+        </member>
+        <member name="F:maxstAR.ColorFormat.YUV420sp">
+            <summary>
+            Same android NV21
+            </summary>
+        </member>
+        <member name="F:maxstAR.ColorFormat.YUV420">
+            <summary>
+            Same android NV12
+            </summary>
+        </member>
+        <member name="F:maxstAR.ColorFormat.YUV420_888">
+            <summary>
+            For android camera2 support (Not used yet)
+            </summary>
+        </member>
+        <member name="F:maxstAR.ColorFormat.GRAY8">
+            <summary>
+            Gray 8 bit image
+            </summary>
+        </member>
+        <member name="T:maxstAR.GuideInfo">
+            <summary>
+            Contains surface's data generated from slam tracking
+            </summary>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetInitializingProgress">
+            <summary>
+            Get a percentage of progress during an initialization step of SLAM
+            </summary>
+            <returns>Slam initializing progress</returns>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetFeatureCount">
+            <summary>
+            Get projected feature count in SLAM (float * 3 = 1 feature)
+            </summary>
+            <returns>projected feature count for SLAM</returns>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetKeyframeCount">
+            <summary>
+            Get keyframe count in SLAM
+            </summary>
+            <returns>keyframe count for SLAM</returns>
+        </member>
+        <member name="M:maxstAR.GuideInfo.GetFeatureBuffer">
+            <summary>
+            Get projected feature buffer for SLAM (Always returns same address so vertex count must be considered)
+            </summary>
+            <returns>feature buffer</returns>
+        </member>
+        <member name="T:maxstAR.TrackedImage">
+            <summary>
+            image data which is used for tracker and rendering
+            </summary>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetIndex">
+            <summary>
+            Get image index
+            </summary>
+            <returns>image index</returns>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetWidth">
+            <summary>
+            Get width
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetHeight">
+            <summary>
+            Get height
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetLength">
+            <summary>
+            Get length (width * height * bits per pixel)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetFormat">
+            <summary>
+            Image format
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetData">
+            <summary>
+            Get image data which used tracking engine
+            </summary>
+            <returns>Image byte array</returns>
+        </member>
+        <member name="M:maxstAR.TrackedImage.GetDataPtr">
+            <summary>
+            Get image data which used tracking engine
+            </summary>
+            <returns>Image data pointer with native address</returns>
+        </member>
+        <member name="T:maxstAR.MapRendererBehaviour">
+            <summary>
+            Map created by Visual SLAM renderer
+            </summary>
+        </member>
+        <member name="T:maxstAR.AbstractMapViewerBehaviour">
+            <summary>
+            Handles 3D map file for authoring. Map controller includes mappoint controller and keyframe controller.
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractMapViewerBehaviour.Load(System.String)">
+            <summary>
+            Read map file and create keyframe and mappoint as Unity3d object.
+            </summary>
+            <param name="fileName"></param>
+            <returns>MapViewer gameobject</returns>
+        </member>
+        <member name="M:maxstAR.AbstractMapViewerBehaviour.UpdateMapViewer">
+            <summary>
+            Updated the control changes of the authoring tool in the scene view.
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractMapViewerBehaviour.ApplyViewCamera(UnityEngine.Vector3,UnityEngine.Quaternion)">
+            <summary>
+            Select the keyframe closest to the scene view.
+            </summary>
+            <param name="position">The position coordinate of the scene view.</param>
+            <param name="quaternion">The rotation coordinate of the scene view.</param>
+        </member>
+        <member name="P:maxstAR.AbstractMapViewerBehaviour.KeyframeIndex">
+            <summary>
+            Change the keyframe number of imported 3D map.
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractMapViewerBehaviour.ShowMesh">
+            <summary>
+            Reconstruct map point cloud to 3D for authoring.
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractMapViewerBehaviour.AutoCamera">
+            <summary>
+            Change the view point of the scene view. scene viewpoint in editor. Select the keyframe closest to the scene view.
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractMapViewerBehaviour.MaxKeyframeCount">
+            <summary>
+            Get the number of keyframes for the imported map.
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractMapViewerBehaviour.Transparent">
+            <summary>
+            Changes the loaded map to translucent state.
+            </summary>
+        </member>
+        <member name="T:maxstAR.AbstractMarkerTrackableBehaviour">
+            <summary>
+            Serve frame marker tracking. This is not working current version!
+            </summary>
+        </member>
+        <member name="F:maxstAR.AbstractMarkerTrackableBehaviour.TrackableList">
+            <summary>
+            Marker name list in temporary
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractMarkerTrackableBehaviour.OnTrackerDataFileChanged(System.String)">
+            <summary>
+            Notify tracking file changed and change target image texture
+            </summary>
+            <param name="trackerFileName"></param>
+        </member>
+        <member name="T:maxstAR.AbstractObjectTrackableBehaviour">
+            <summary>
+            Serve 3dmap file recognition and tracking
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractObjectTrackableBehaviour.OnTrackerDataFileChanged(System.String)">
+            <summary>
+            Notify 3dmap file is changed. 
+            </summary>
+            <param name="trackerFileName">3dmap file name</param>
+        </member>
+        <member name="T:maxstAR.StorageType">
+            <summary>
+            To check the special case of android file is in assets folder
+            </summary>
+        </member>
+        <member name="F:maxstAR.StorageType.StreamingAssets">
+            <summary>
+            File is located in android assets folder
+            </summary>
+        </member>
+        <member name="F:maxstAR.StorageType.AbsolutePath">
+            <summary>
+            Normal file
+            </summary>
+        </member>
+        <member name="T:maxstAR.MaxstAR">
+            <summary>
+            Set device environment
+            </summary>
+        </member>
+        <member name="M:maxstAR.MaxstAR.SetScreenOrientation(System.Int32)">
+            <summary>
+            Notify screen orientation chagned
+            </summary>
+            <param name="orientation">ScreenOrientation enum value</param>
+        </member>
+        <member name="T:maxstAR.AbstractConfigurationScriptableObject">
+            <summary>
+            Control the configuration asset file
+            </summary>
+        </member>
+        <member name="M:maxstAR.AbstractConfigurationScriptableObject.GetInstance">
+            <summary>
+            Get configuration asset instance
+            </summary>
+            <returns>Configuration scriptable object</returns>
+        </member>
+        <member name="P:maxstAR.AbstractConfigurationScriptableObject.LicenseKey">
+            <summary>
+            App signature key
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractConfigurationScriptableObject.WebcamType">
+            <summary>
+            Select webcam type
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractConfigurationScriptableObject.CameraType">
+            <summary>
+            Select camera type
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractConfigurationScriptableObject.CameraResolution">
+            <summary>
+            Select camera resolution
+            </summary>
+        </member>
+        <member name="P:maxstAR.AbstractConfigurationScriptableObject.WearableType">
+            <summary>
+            Select wearable device type
+            </summary>
+        </member>
+        <member name="T:maxstAR.TrackingState">
+            <summary>
+            Container for individual tracking information
+            </summary>
+        </member>
+        <member name="M:maxstAR.TrackingState.GetTrackingResult">
+            <summary>Output the number of trackers that have been tracked successfully.</summary>
+            <returns>Return trackable count.</returns>
+        </member>
+        <member name="M:maxstAR.TrackingState.GetCodeScanResult">
+            <summary>Outputs the recognition result of the bar code / QR code.</summary>
+            <returns>Return code scan string</returns>
+        </member>
+        <member name="M:maxstAR.TrackingState.GetImage">
+            <summary>
+            Extract image used for tracking
+            </summary>
+            <returns>Image instance</returns>
+        </member>
+        <member name="T:maxstAR.WearableCalibration">
+            <summary>
+            API for wearable calibration.
+            </summary>
+        </member>
+        <member name="M:maxstAR.WearableCalibration.GetInstance">
+            <summary>
+            Get a WearableCalibration instance.
+            </summary>
+            <returns>Return the WearableCalibration instance</returns>
+        </member>
+        <member name="M:maxstAR.WearableCalibration.IsActivated">
+            <summary>
+            Confirm that the HMD unit is initialized.
+            </summary>
+            <returns>Result of device initialize</returns>
+        </member>
+        <member name="M:maxstAR.WearableCalibration.Init(System.String,System.Int32,System.Int32)">
+            <summary>
+            Initialize the HMD device.
+            </summary>
+            <param name="modelName">Device name</param>
+            <param name="width">Device screen width</param>
+            <param name="height">Device screen height</param>
+            <returns>Result of device initialize</returns>
+        </member>
+        <member name="M:maxstAR.WearableCalibration.Deinit">
+            <summary>
+            Deinitialize the HMD device.
+            </summary>
+        </member>
+        <member name="M:maxstAR.WearableCalibration.GetViewport(maxstAR.WearableCalibration.EyeType)">
+            <summary>
+            Get HMD screen viewport.
+            </summary>
+            <param name="eyeType">Types of HMD eyes</param>
+            <returns>Viewport array(float type array, size 4).</returns>
+        </member>
+        <member name="M:maxstAR.WearableCalibration.GetProjectionMatrix(maxstAR.WearableCalibration.EyeType)">
+            <summary>
+            Get calibrated HMD projection matrix.
+            </summary>
+            <param name="eyeType">Types of HMD eyes</param>
+            <returns>Projection matrix array(float type array, size 16).</returns>
+        </member>
+        <member name="T:maxstAR.WearableCalibration.EyeType">
+            <summary>
+            Types of HMD eyes
+            </summary>
+        </member>
+        <member name="F:maxstAR.WearableCalibration.EyeType.EYE_LEFT">
+            <summary>
+            Left HMD eye
+            </summary>
+        </member>
+        <member name="F:maxstAR.WearableCalibration.EyeType.EYE_RIGHT">
+            <summary>
+            Right HMD eye
+            </summary>
+        </member>
+        <member name="F:maxstAR.WearableCalibration.EyeType.EYE_NUM">
+            <summary>
+            Number of eyes
+            </summary>
+        </member>
+        <member name="T:maxstAR.WearableCalibration.WearableType">
+            <summary>
+            Wearable Device Type
+            </summary>
+        </member>
+        <member name="F:maxstAR.WearableCalibration.WearableType.None">
+            <summary>
+            None Wearable Device
+            </summary>
+        </member>
+        <member name="F:maxstAR.WearableCalibration.WearableType.OpticalSeeThrough">
+            <summary>
+            Optical See-throught Wearable Device
+            </summary>
+        </member>
+        <member name="T:maxstAR.ResultCode">
+            <summary>
+            API call return value
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.Success">
+            <summary>
+            Success
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraPermissionIsNotResolved">
+            <summary>
+            Permission state unknown
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraDevicedRestriced">
+            <summary>
+            No Camera can be usable
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraPermissionIsNotGranted">
+            <summary>
+            Camera permission is not grated
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraAlreadyOpened">
+            <summary>
+            Camera is alreay opened
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraAccessException">
+            <summary>
+            Camera access exception
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraNotExist">
+            <summary>
+            Camera not exist
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.CameraOpenTimeOut">
+            <summary>
+            Camera open timeout
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.FlashLightUnsupported">
+            <summary>
+            Flash light is not supported
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.TrackerAlreadyStarted">
+            <summary>
+            Tracker already started
+            </summary>
+        </member>
+        <member name="F:maxstAR.ResultCode.UnknownError">
+            <summary>
+            Unknown error
+            </summary>
+        </member>
+        <member name="T:maxstAR.SensorDevice">
+            <summary>
+            Control device sensor
+            </summary>
+        </member>
+        <member name="M:maxstAR.SensorDevice.GetInstance">
+            <summary>
+            Get a SensorDevice instance.
+            </summary>
+            <returns>Return the SensorDevice instance</returns>
+        </member>
+        <member name="M:maxstAR.SensorDevice.Start">
+            <summary>
+            Start device sensor
+            </summary>
+        </member>
+        <member name="M:maxstAR.SensorDevice.Stop">
+            <summary>
+            Stop device sensor
+            </summary>
+        </member>
+        <member name="T:maxstAR.CameraDevice">
+            <summary>
+            class for camera device handling
+            </summary>
+        </member>
+        <member name="M:maxstAR.CameraDevice.GetInstance">
+            <summary>
+            Get a CameraDevice instance.
+            </summary>
+            <returns>Return the CameraDevice instance</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.Start">
+            <summary>
+            Start camera preview
+            </summary>
+        </member>
+        <member name="M:maxstAR.CameraDevice.SetFocusMode(maxstAR.CameraDevice.FocusMode)">
+            <summary>
+            Set camera focus mode
+            </summary>
+            <param name="focusMode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.SetFlashLightMode(System.Boolean)">
+            <summary>
+            Turn on/off flash light
+            </summary>
+        </member>
+        <member name="M:maxstAR.CameraDevice.SetAutoWhiteBalanceLock(System.Boolean)">
+            <summary>
+            Toggle auto white balance lock (Android only supported now)
+            </summary>
+        </member>
+        <member name="M:maxstAR.CameraDevice.FlipVideo(maxstAR.CameraDevice.FlipDirection,System.Boolean)">
+            <summary>
+            Flip video background 
+            </summary>
+            <param name="direction">Flip direction</param>
+            <param name="on">True to set. False to rest</param>
+        </member>
+        <member name="M:maxstAR.CameraDevice.GetParamList">
+            <summary>
+            Get parameter key list  (Android only supported now)
+            </summary>
+            <returns>parameter key list</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.SetParam(System.String,System.Boolean)">
+            <summary>
+            Set camera parameter (Android only supported now)
+            </summary>
+            <param name="key">Parameter key</param>
+            <param name="boolTypeValue">Parameter value</param>
+            <returns> True if setting success</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.SetParam(System.String,System.Int32)">
+            <summary>
+            Set camera parameter (Android only supported now)
+            </summary>
+            <param name="key">Parameter key</param>
+            <param name="intTypeValue">Parameter value</param>
+            <returns> True success</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.SetParam(System.String,System.Int32,System.Int32)">
+            <summary>
+            Set camera parameter (Android only supported now)
+            </summary>
+            <param name="key">Parameter key</param>
+            <param name="min">min value</param>
+            <param name="max">min value</param>
+            <returns> True success</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.SetParam(System.String,System.String)">
+            <summary>
+            Set camera parameter (Android only supported now)
+            </summary>
+            <param name="key">Parameter key</param>
+            <param name="stringTypeValue">Parameter value</param>
+            <returns> True if setting success</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.Stop">
+            <summary>
+            Stop camera preview
+            </summary>
+        </member>
+        <member name="M:maxstAR.CameraDevice.GetWidth">
+            <summary>
+            </summary>
+            <returns>get camera preview width</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.GetHeight">
+            <summary>
+            </summary>
+            <returns>get camera preview height</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.GetProjectionMatrix">
+            <summary>
+            Get projection matrix
+            </summary>
+            <returns>Matrix4x4 projection matrix</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.IsFlipHorizontal">
+            <summary>
+            Get flip state
+            </summary>
+            <returns>Horizontal flip</returns>
+        </member>
+        <member name="M:maxstAR.CameraDevice.IsFlipVertical">
+            <summary>
+            Get flip state
+            </summary>
+            <returns>Vertical flip</returns>
+        </member>
+        <member name="T:maxstAR.CameraDevice.FocusMode">
+            <summary>
+            Camera focus mode
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUS_AUTO">
+            <summary>
+            Continuous focus mode. This focus mode is proper for AR
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.FocusMode.FOCUS_MODE_AUTO">
+            <summary>
+            Single auto focus mode
+            </summary>
+        </member>
+        <member name="T:maxstAR.CameraDevice.CameraType">
+            <summary>
+            Supported camera type (Mobile only)
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.CameraType.Rear">
+            <summary>
+            Rear camera
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.CameraType.Face">
+            <summary>
+            Face camera
+            </summary>
+        </member>
+        <member name="T:maxstAR.CameraDevice.CameraResolution">
+            <summary>
+            Supported camera resolution
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.CameraResolution.Resolution640x480">
+            <summary>
+            640 * 480 (4:3 Resolution)
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.CameraResolution.Resolution1280x720">
+            <summary>
+            1280 * 720 (16:9 Resolution)
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.CameraResolution.Resolution1920x1080">
+            <summary>
+            1920 * 1080 (16:9 Resolution)
+            </summary>
+        </member>
+        <member name="T:maxstAR.CameraDevice.FlipDirection">
+            <summary>
+            Flip video
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.FlipDirection.HORIZONTAL">
+            <summary>
+            Horizontal flip
+            </summary>
+        </member>
+        <member name="F:maxstAR.CameraDevice.FlipDirection.VERTICAL">
+            <summary>
+            Vertical flip
+            </summary>
+        </member>
+        <member name="T:maxstAR.MatrixUtils">
+            <summary>
+            Matrix converting utililty class
+            </summary>
+        </member>
+        <member name="M:maxstAR.MatrixUtils.PositionFromMatrix(UnityEngine.Matrix4x4)">
+            <summary>
+            Get position factor from matrix
+            </summary>
+            <param name="input">Unity Matrix4x4</param>
+            <returns>postion</returns>
+        </member>
+        <member name="M:maxstAR.MatrixUtils.ScaleFromMatrix(UnityEngine.Matrix4x4)">
+            <summary>
+            Get scale factor from matrix
+            </summary>
+            <param name="input">Untiy Matrix4x4</param>
+            <returns>scale</returns>
+        </member>
+        <member name="M:maxstAR.MatrixUtils.MatrixFromQuaternion(UnityEngine.Quaternion)">
+            <summary>
+            Get Matrix4x4 from quaternion
+            </summary>
+            <param name="input">Quaternion</param>
+            <returns>Unity Matrix4x4</returns>
+        </member>
+        <member name="M:maxstAR.MatrixUtils.QuaternionFromMatrix(UnityEngine.Matrix4x4)">
+            <summary>
+            Get orientation from matrix
+            </summary>
+            <param name="m">unity matrix</param>
+            <returns>orientation</returns>
+        </member>
+        <member name="T:maxstAR.MaxstARUtils">
+            <summary>
+            Define constant values
+            </summary>
+        </member>
+        <member name="T:maxstAR.SurfaceThumbnail">
+            <summary>
+            Contains surface thumbnail image information of first keyframe
+            </summary>
+        </member>
+        <member name="M:maxstAR.SurfaceThumbnail.GetWidth">
+            <summary>
+            </summary>
+            <returns>image width</returns>
+        </member>
+        <member name="M:maxstAR.SurfaceThumbnail.GetHeight">
+            <summary>
+            </summary>
+            <returns>image height</returns>
+        </member>
+        <member name="M:maxstAR.SurfaceThumbnail.GetLength">
+            <summary>
+            </summary>
+            <returns>image data length</returns>
+        </member>
+        <member name="M:maxstAR.SurfaceThumbnail.GetData">
+            <summary>
+            </summary>
+            <returns>thumbnail image data buffer</returns>
+        </member>
+        <member name="T:maxstAR.Trackable">
+            <summary>
+            Container for individual tracking information
+            </summary>
+        </member>
+        <member name="M:maxstAR.Trackable.GetId">
+            <summary></summary>
+            <returns>tracking target id</returns>
+        </member>
+        <member name="M:maxstAR.Trackable.GetName">
+            <summary>
+            </summary>
+            <returns>tracking target name (map file name without extension)</returns>
+        </member>
+        <member name="M:maxstAR.Trackable.GetPose">
+            <summary></summary>
+            <returns>tracking pose matrix</returns>
+        </member>
+        <member name="T:maxstAR.TrackerManager">
+            <summary>
+            Control AR Engine (Singletone)
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_CODE_SCANNER">
+            <summary>
+            Code scanner
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_IMAGE">
+            <summary>
+            Planar image Tracker
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_MARKER">
+            <summary>
+            Marker Tracker
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_OBJECT">
+            <summary>
+            Object Tracker(Object data should be created via SLAM tracker)
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_SLAM">
+            <summary>
+            Visual slam tracker (Can create surface data and save it)
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TRACKER_TYPE_INSTANT">
+            <summary>
+            Instant Tracker
+            </summary>
+        </member>
+        <member name="M:maxstAR.TrackerManager.GetInstance">
+            <summary>
+            Get TrackerManager instance
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:maxstAR.TrackerManager.StartTracker(System.Int32)">
+            <summary>Start Tracker.</summary>
+            <param name="trackerType">Bit mask of tracker type.</param>
+        </member>
+        <member name="M:maxstAR.TrackerManager.StopTracker">
+            <summary>Stop Tracker.</summary>
+        </member>
+        <member name="M:maxstAR.TrackerManager.DestroyTracker">
+            <summary>Destroy Tracker.</summary>
+        </member>
+        <member name="M:maxstAR.TrackerManager.AddTrackerData(System.String,System.Boolean)">
+            <summary>Add the Trackable data to the Map List.</summary>
+            <param name="trackingFileName">File path of map for map addition.</param>
+            <param name="isAndroidAssetFile">Map file position for addition. True is in Asset folder.</param>
+        </member>
+        <member name="M:maxstAR.TrackerManager.RemoveTrackerData(System.String)">
+            <summary>Delete the Trackable data from the Map List.</summary>
+            <param name="trackingFileName">trackingFileName map file name. 
+            This name should be same which added. If set "" (empty) file list will be cleared</param>
+        </member>
+        <member name="M:maxstAR.TrackerManager.LoadTrackerData">
+            <summary>Load the Trackable data.</summary>
+        </member>
+        <member name="M:maxstAR.TrackerManager.SetTrackingOption(maxstAR.TrackerManager.TrackingOption)">
+            <summary>Change Image Tracke Mode.</summary>
+        </member>
+        <member name="M:maxstAR.TrackerManager.IsTrackerDataLoadCompleted">
+            <summary>Check that the Trackable data loading is finished.</summary>
+            <returns>Return map loading status. True is completed.</returns>
+        </member>
+        <member name="M:maxstAR.TrackerManager.UpdateTrackingState">
+            <summary>
+            Upate tracking state. This function should be called before GetTrackingResult
+            </summary>
+            <returns>TrackingState instance</returns>
+        </member>
+        <member name="M:maxstAR.TrackerManager.GetTrackingState">
+            <summary>
+            Get saved TrackingState value
+            </summary>
+            <returns>TrackingState instance</returns>
+        </member>
+        <member name="M:maxstAR.TrackerManager.GetWorldPositionFromScreenCoordinate(UnityEngine.Vector2)">
+            <summary>Gets the x, y, 0 coordinates on the world coordinate corresponding to x, y in the Screen coordinate.</summary>
+            <param name="screen">Input screen coordinates 2d.</param>
+            <returns>World coordinates 3d</returns>
+        </member>
+        <member name="M:maxstAR.TrackerManager.FindSurface">
+            <summary>Start SLAM learning.</summary>
+        </member>
+        <member name="M:maxstAR.TrackerManager.QuitFindingSurface">
+            <summary>SLAM stops learning.</summary>
+        </member>
+        <member name="M:maxstAR.TrackerManager.GetGuideInfo">
+            <summary>
+            Get guide information of the found surface on SLAM after the FindSurface method has been called
+            </summary>
+            <returns>SurfaceMesh instance</returns>
+        </member>
+        <member name="M:maxstAR.TrackerManager.SaveSurfaceData(System.String)">
+            <summary>Saves SLAM learning results.</summary>
+            <param name="outputFileName">File path of map for save.</param>
+            <returns>Return save result of success or fail. True is saved.</returns>
+        </member>
+        <member name="T:maxstAR.TrackerManager.TrackingOption">
+            <summary>
+            Additional tracking option (Image tracker only)
+            1 : Normal Tracking
+            2 : Extended Tracking
+            4 : Multi Target Tracking
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TrackingOption.NORMAL_TRACKING">
+            <summary>
+            Normal Tracking
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TrackingOption.EXTEND_TRACKING">
+            <summary>
+            Extended Tracking
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TrackingOption.MULTI_TRACKING">
+            <summary>
+            Multiple Target Tracking
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TrackingOption.JITTER_REDUCTION_ACTIVATION">
+            <summary>
+            Jitter Reduction Activation
+            </summary>
+        </member>
+        <member name="F:maxstAR.TrackerManager.TrackingOption.JITTER_REDUCTION_DEACTIVATION">
+            <summary>
+            Jitter Reduction Deactivation
+            </summary>
+        </member>
+        <member name="T:maxstAR.TrackingResult">
+            <summary>
+            Contains tracked targets informations
+            </summary>
+        </member>
+        <member name="M:maxstAR.TrackingResult.GetCount">
+            <summary>
+            Get tracking target count. Current version ar engine could not track multi target.
+            That feature will be implemented not so far future.
+            </summary>
+            <returns>tracking target count</returns>
+        </member>
+        <member name="M:maxstAR.TrackingResult.GetTrackable(System.Int32)">
+            <summary>
+            Get tracking target information
+            </summary>
+            <param name="index">target index</param>
+            <returns>Trackable class instance</returns>
+        </member>
+    </members>
+</doc>

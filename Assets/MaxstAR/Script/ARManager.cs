@@ -19,6 +19,13 @@ namespace maxstAR
 #if UNITY_ANDROID
 			androidEngine = new AndroidEngine();
 #endif
+
+#if UNITY_EDITOR
+			// Find arsdk_version.txt
+			// if not exist file create file and write arsdk version
+			// if file exist write
+			System.IO.File.WriteAllText(System.IO.Path.Combine(Application.streamingAssetsPath, "arsdk_version.txt"), MaxstAR.GetVersion());
+#endif
         }
 
 		void OnDestroy()

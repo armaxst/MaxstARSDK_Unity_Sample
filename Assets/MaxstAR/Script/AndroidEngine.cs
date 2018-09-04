@@ -24,7 +24,7 @@ namespace maxstAR
                 currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
                 if (currentActivity != null)
                 {
-					string licenseKey = AbstractConfigurationScriptableObject.GetInstance().LicenseKey;
+					string licenseKey = ConfigurationScriptableObject.GetInstance().LicenseKey;
                     maxstARClass = new AndroidJavaClass("com.maxst.ar.MaxstARInitializer");
 					maxstARClass.CallStatic("init", currentActivity, licenseKey);
 					maxstARClass.CallStatic("setCameraApi", 1);
@@ -35,7 +35,7 @@ namespace maxstAR
                 }
             }
 #endif
-        }
+		}
 
         public void Dispose()
         {

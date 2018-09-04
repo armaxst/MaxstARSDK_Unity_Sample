@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using UnityEngine.Rendering;
-using System;
 
 namespace maxstAR
 {
@@ -19,11 +18,11 @@ namespace maxstAR
 		public string trackableId { get; set; }
 		public string trackableName { get; set; }
 		public Matrix4x4 trackablePose { get; set; }
-		public bool trackingResult { get; set; }
+		public bool result { get; set; }
 
 		private TrackingEventHandler trackingEventHandler;
 
-		void Start()
+		private void Awake()
 		{
 			trackingEventHandler = GetComponent<TrackingEventHandler>();
 		}
@@ -77,9 +76,9 @@ namespace maxstAR
 			}
 		}
 
-		internal void ApplyResult()
+		public void ApplyResult()
 		{
-			if (trackingResult)
+			if (result == true)
 			{
 				OnTrackSuccess(trackableId, trackableName, trackablePose);
 			}
@@ -88,5 +87,5 @@ namespace maxstAR
 				OnTrackFail();
 			}
 		}
-	}
+    }
 }
