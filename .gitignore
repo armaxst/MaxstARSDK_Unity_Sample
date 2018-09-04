@@ -26,3 +26,5 @@ MaxstARSDK_UnitySample(Github).sln
 MaxstARSDK_UnitySample(Github).csproj
 MaxstARSDK_UnitySample(Github).Editor.csproj
 .vs/
+Assets/StreamingAssets/arsdk_version.txt
+Assets/StreamingAssets/arsdk_version.txt.meta
