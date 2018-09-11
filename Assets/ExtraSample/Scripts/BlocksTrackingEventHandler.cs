@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BlocksTrackingEventHandler : TrackingEventHandler
 {
+	private int successCount = 0;
+
 	UnityEngine.Video.VideoPlayer videoPlayer;
 
 	private void Start()
@@ -13,6 +15,11 @@ public class BlocksTrackingEventHandler : TrackingEventHandler
 
 	public override void OnTrackingSuccess()
 	{
+		successCount += 1;
+		if (successCount < 3)
+		{
+			return;
+		}
 
 		if (videoPlayer != null)
 		{
@@ -32,6 +39,7 @@ public class BlocksTrackingEventHandler : TrackingEventHandler
 
 	public override void OnTrackingFail()
 	{
+		successCount = 0;
 
 		if (videoPlayer != null)
 		{
