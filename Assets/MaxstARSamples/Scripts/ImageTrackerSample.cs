@@ -13,24 +13,24 @@ public class ImageTrackerSample : ARBehaviour
 	private Dictionary<string, ImageTrackableBehaviour> imageTrackablesMap =
 		new Dictionary<string, ImageTrackableBehaviour>();
 
-	private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
+    private CameraBackgroundBehaviour cameraBackgroundBehaviour = null;
 
-	void Awake()
-	{
+    void Awake()
+    {
 		Init();
 
-		cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
-		if (cameraBackgroundBehaviour == null)
-		{
-			Debug.LogError("Can't find CameraBackgroundBehaviour.");
-			return;
-		}
-	}
+        cameraBackgroundBehaviour = FindObjectOfType<CameraBackgroundBehaviour>();
+        if (cameraBackgroundBehaviour == null)
+        {
+            Debug.LogError("Can't find CameraBackgroundBehaviour.");
+            return;
+        }
+    }
 
 	void Start()
 	{
-		QualitySettings.vSyncCount = 0;
-		Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
 
 		imageTrackablesMap.Clear();
 		ImageTrackableBehaviour[] imageTrackables = FindObjectsOfType<ImageTrackableBehaviour>();
@@ -96,11 +96,11 @@ public class ImageTrackerSample : ARBehaviour
 		foreach (var t in imageTrackablesMap)
 		{
 			t.Value.result = false;
-		}
+	}
 
 		TrackingState state = TrackerManager.GetInstance().UpdateTrackingState();
 
-		cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
+        cameraBackgroundBehaviour.UpdateCameraBackgroundImage(state);
 
 		TrackingResult trackingResult = state.GetTrackingResult();
 
@@ -122,7 +122,7 @@ public class ImageTrackerSample : ARBehaviour
 
 	public void SetNormalMode()
 	{
-		TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
+        TrackerManager.GetInstance().SetTrackingOption(TrackerManager.TrackingOption.NORMAL_TRACKING);
 	}
 
 	public void SetExtendedMode()
