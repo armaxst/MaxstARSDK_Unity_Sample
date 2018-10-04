@@ -53,8 +53,14 @@ public class InstantTraining : ARBehaviour {
 
     private void AddTrackerData()
     {
-        TrackerManager.GetInstance().AddTrackerData("{\"image\":\"add_image\",\"image_path\":\"" + Application.streamingAssetsPath + "/intant_training.jpg" + "\",\"image_width\":0.26}", true);
-        TrackerManager.GetInstance().AddTrackerData("{\"image\":\"add_image\",\"image_path\":\"" + Application.streamingAssetsPath + "/intant_training1.jpg" + "\",\"image_width\":0.26}", true);
+        if(Application.platform == RuntimePlatform.Android) {
+            TrackerManager.GetInstance().AddTrackerData("{\"image\":\"add_image\",\"image_path\":\"" + "intant_training.jpg" + "\",\"image_width\":0.26}", true);
+            TrackerManager.GetInstance().AddTrackerData("{\"image\":\"add_image\",\"image_path\":\"" + "intant_training1.jpg" + "\",\"image_width\":0.26}", true);
+        } else {
+            TrackerManager.GetInstance().AddTrackerData("{\"image\":\"add_image\",\"image_path\":\"" + Application.streamingAssetsPath + "/intant_training.jpg" + "\",\"image_width\":0.26}", true);
+            TrackerManager.GetInstance().AddTrackerData("{\"image\":\"add_image\",\"image_path\":\"" + Application.streamingAssetsPath + "/intant_training1.jpg" + "\",\"image_width\":0.26}", true);
+        }
+       
         TrackerManager.GetInstance().LoadTrackerData();
     }
 
@@ -71,7 +77,7 @@ public class InstantTraining : ARBehaviour {
             for (int i = 0; i < trackingResult.GetCount(); i++)
             {
                 Trackable trackable = trackingResult.GetTrackable(i);
-                Debug.Log(trackable.GetName());
+              
                 Matrix4x4 poseMatrix = trackable.GetPose();
 
                 float width = trackable.GetWidth();
@@ -79,7 +85,6 @@ public class InstantTraining : ARBehaviour {
 
                 trackingObject.transform.position = MatrixUtils.PositionFromMatrix(poseMatrix);
                 trackingObject.transform.rotation = MatrixUtils.QuaternionFromMatrix(poseMatrix);
-
                 trackingObject.transform.localScale = new Vector3(width, height, height);
             }
         }
