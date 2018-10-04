@@ -49,4 +49,9 @@ public class ExtramHomeSceneManager : ARBehaviour
     {
 		SceneStackManager.Instance.LoadScene("ExtraHome", "ExtraVisualSLAMKnight");
     }
+
+    public void OnExtraInstantTrainingClick()
+    {
+        SceneStackManager.Instance.LoadScene("ExtraHome", "InstantTraining");
+    }
 }
