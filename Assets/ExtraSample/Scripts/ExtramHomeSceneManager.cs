@@ -54,4 +54,9 @@ public class ExtramHomeSceneManager : ARBehaviour
     {
         SceneStackManager.Instance.LoadScene("ExtraHome", "InstantTraining");
     }
+
+    public void OnExtraNoImageTrackerbleClick()
+    {
+        SceneStackManager.Instance.LoadScene("ExtraHome", "NoImageTrackerble");
+    }
 }
